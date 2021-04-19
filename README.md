@@ -1,1 +1,1 @@
-# Scrabble
+Very agile Scrabble implementation
