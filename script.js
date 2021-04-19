@@ -82,7 +82,7 @@ function checkvalid() {
                         adjacent = false
                     }
                 }
-                if (adjacent) {
+                if (adjacent || changedFields.length == 1) {
                     document.getElementById("donebtn").disabled = false
                 }
             } else {
