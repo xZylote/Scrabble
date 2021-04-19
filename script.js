@@ -80,9 +80,11 @@ function checkvalid() {
         } else {
             //Check neighbors
             for (item of changedFields){
-                if (board[item])
+                if (board[item]-1 || board[item]+1 || board[item]-15 || board[item]+15){
+                    document.getElementById("donebtn").disabled = false
+                }
             }
-            document.getElementById("donebtn").disabled = false
+            
         }
 
     }
