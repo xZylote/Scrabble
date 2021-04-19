@@ -8,311 +8,326 @@
 </head>
 
 <body>
-    <div class="letters">
-        <table>
-            <tr id="playableL">
-                <td id="a" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    S
-                </td>
-                <td id="b" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    C
-                </td>
-                <td id="c" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    R
-                </td>
-                <td id="d" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    A
-                </td>
-                <td id="e" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    B
-                </td>
-                <td id="f" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    B
-                </td>
-                <td id="g" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    L
-                </td>
-                <td id="h" class="letter" draggable="true" ondragstart="drag(event)" onclick="returnLetter(event)">
-                    E
-                </td>
-            </tr>
-        </table>
+    <div class="row">
+        <div class="column">
+            <button id="donebtn" disabled="true" onclick="done()">Done</button>
+        </div>
+        <div class="center-column">
+            <div class="letters">
+                <table>
+                    <tr id="playableL">
+                        <td id="a" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            S
+                        </td>
+                        <td id="b" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            C
+                        </td>
+                        <td id="c" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            R
+                        </td>
+                        <td id="d" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            A
+                        </td>
+                        <td id="e" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            B
+                        </td>
+                        <td id="f" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            B
+                        </td>
+                        <td id="g" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            L
+                        </td>
+                        <td id="h" class="letter" draggable="true" ondragstart="drag(event)"
+                            onclick="returnLetter(event)">
+                            E
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="board">
+                <table>
+                    <tr>
+                        <!--Row 1-->
+                        <td id="0" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="1" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="2" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="3" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="4" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="5" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="6" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="7" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="8" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="9" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="10" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="11" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="12" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="13" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="14" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 2-->
+                        <td id="15" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="16" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="17" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="18" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="19" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="20" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="21" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="22" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="23" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="24" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="25" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="26" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="27" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="28" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="29" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 3-->
+                        <td id="30" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="31" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="32" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="33" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="34" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="35" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="36" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="37" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="38" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="39" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="40" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="41" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="42" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="43" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="44" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 4-->
+                        <td id="45" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="46" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="47" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="48" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="49" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="50" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="51" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="52" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="53" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="54" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="55" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="56" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="57" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="58" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="59" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 5-->
+                        <td id="60" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="61" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="62" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="63" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="64" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="65" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="66" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="67" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="68" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="69" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="70" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="71" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="72" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="73" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="74" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 6-->
+                        <td id="75" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="76" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="77" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="78" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="79" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="80" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="81" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="82" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="83" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="84" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="85" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="86" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="87" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="88" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="89" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 7-->
+                        <td id="90" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="91" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="92" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="93" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="94" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="95" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="96" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="97" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="98" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="99" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="100" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="101" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="102" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="103" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="104" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 8-->
+                        <td id="105" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="106" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="107" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="108" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="109" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="110" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="111" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="112" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="113" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="114" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="115" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="116" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="117" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="118" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="119" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 9-->
+                        <td id="120" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="121" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="122" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="123" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="124" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="125" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="126" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="127" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="128" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="129" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="130" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="131" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="132" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="133" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="134" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 10-->
+                        <td id="135" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="136" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="137" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="138" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="139" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="140" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="141" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="142" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="143" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="144" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="145" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="146" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="147" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="148" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="149" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 11-->
+                        <td id="150" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="151" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="152" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="153" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="154" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="155" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="156" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="157" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="158" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="159" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="160" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="161" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="162" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="163" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="164" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 12-->
+                        <td id="165" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="166" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="167" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="168" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="169" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="170" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="171" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="172" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="173" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="174" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="175" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="176" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="177" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="178" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="179" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 13-->
+                        <td id="180" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="181" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="182" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="183" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="184" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="185" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="186" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="187" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="188" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="189" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="190" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="191" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="192" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="193" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="194" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 14-->
+                        <td id="195" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="196" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="197" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="198" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="199" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="200" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="201" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="202" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="203" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="204" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="205" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="206" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="207" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="208" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="209" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                    <tr>
+                        <!--Row 15-->
+                        <td id="210" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="211" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="212" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="213" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="214" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="215" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="216" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="217" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="218" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="219" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="220" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="221" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="222" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="223" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                        <td id="224" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="right-column"></div>
     </div>
-    <div class="board">
-        <table>
-            <tr>
-                <!--Row 1-->
-                <td id="0" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="1" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="2" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="3" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="4" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="5" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="6" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="7" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="8" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="9" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="10" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="11" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="12" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="13" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="14" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 2-->
-                <td id="15" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="16" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="17" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="18" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="19" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="20" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="21" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="22" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="23" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="24" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="25" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="26" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="27" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="28" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="29" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 3-->
-                <td id="30" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="31" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="32" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="33" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="34" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="35" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="36" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="37" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="38" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="39" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="40" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="41" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="42" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="43" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="44" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 4-->
-                <td id="45" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="46" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="47" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="48" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="49" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="50" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="51" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="52" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="53" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="54" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="55" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="56" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="57" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="58" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="59" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 5-->
-                <td id="60" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="61" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="62" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="63" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="64" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="65" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="66" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="67" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="68" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="69" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="70" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="71" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="72" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="73" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="74" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 6-->
-                <td id="75" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="76" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="77" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="78" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="79" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="80" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="81" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="82" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="83" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="84" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="85" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="86" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="87" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="88" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="89" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 7-->
-                <td id="90" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="91" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="92" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="93" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="94" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="95" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="96" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="97" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="98" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="99" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="100" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="101" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="102" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="103" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="104" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 8-->
-                <td id="105" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="106" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="107" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="108" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="109" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="110" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="111" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="112" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="113" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="114" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="115" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="116" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="117" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="118" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="119" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 9-->
-                <td id="120" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="121" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="122" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="123" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="124" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="125" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="126" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="127" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="128" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="129" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="130" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="131" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="132" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="133" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="134" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 10-->
-                <td id="135" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="136" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="137" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="138" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="139" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="140" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="141" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="142" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="143" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="144" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="145" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="146" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="147" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="148" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="149" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 11-->
-                <td id="150" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="151" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="152" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="153" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="154" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="155" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="156" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="157" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="158" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="159" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="160" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="161" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="162" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="163" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="164" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 12-->
-                <td id="165" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="166" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="167" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="168" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="169" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="170" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="171" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="172" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="173" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="174" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="175" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="176" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="177" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="178" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="179" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 13-->
-                <td id="180" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="181" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="182" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="183" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="184" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="185" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="186" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="187" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="188" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="189" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="190" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="191" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="192" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="193" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="194" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 14-->
-                <td id="195" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="196" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="197" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="198" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="199" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="200" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="201" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="202" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="203" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="204" class="field tl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="205" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="206" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="207" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="208" class="field dw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="209" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-            <tr>
-                <!--Row 15-->
-                <td id="210" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="211" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="212" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="213" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="214" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="215" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="216" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="217" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="218" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="219" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="220" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="221" class="field dl" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="222" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="223" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-                <td id="224" class="field tw" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-            </tr>
-        </table>
-    </div>
-    <button id="donebtn" disabled="true" onclick="done()">Done</button>
 </body>
 
 </html>
