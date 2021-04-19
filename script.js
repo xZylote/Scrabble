@@ -78,11 +78,10 @@ function checkvalid() {
         if(firstMove && changedFields.includes(112) ){
             document.getElementById("donebtn").disabled = false
         } else {
-            //Check neighbors
             for (item of changedFields){
-                if (board[item]-1 || board[item]+1 || board[item]-15 || board[item]+15){
+                if (board[item-1] || board[item+1] || board[item-15] || board[item+15]){
                     document.getElementById("donebtn").disabled = false
-                }
+                } 
             }
             
         }
