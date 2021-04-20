@@ -146,6 +146,7 @@ function done() {
         for (item of changedFields) {
             document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
             document.getElementById(item).childNodes[0].setAttribute("onclick", "")
+            document.getElementById(item).childNodes[0].classList.add("setInStone")
             document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
             board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
         }

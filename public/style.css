@@ -76,3 +76,7 @@ sub {
     width: 100px;
     height: 10px;
 }
+
+.setInStone {
+    background-color: grey !important;
+}
