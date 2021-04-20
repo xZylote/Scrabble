@@ -2,6 +2,8 @@ const board = new Array(225).fill(null);
 var changedFields = [];
 var draggedOrigin;
 var firstMove = true;
+var row;
+var column;
 
 function allowDrop(e) {
     e.preventDefault();
@@ -22,7 +24,6 @@ function drop(e) {
         changedFields.push(parseInt(e.target.id));
         e.target.ondragover = "";
     }
-    console.log(changedFields)
     checkvalid();
 }
 
@@ -33,33 +34,138 @@ function returnLetter(e) {
     checkvalid();
 }
 
-function done() {
-    if (firstMove) {
-        firstMove = false;
-    }
-    var word = "";
-    for (item of changedFields) {
-        document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
-        document.getElementById(item).childNodes[0].setAttribute("onclick", "")
-        word += document.getElementById(item).childNodes[0].innerHTML
-    }
-    word = word.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "");
-    console.log(word)
-    //CHECK DICT
-    for (item of changedFields) {
-        board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "");
-    }
-    console.log(board);
-    changedFields = [];
+function returnLetterSub(e) {
+    e.target.parentElement.parentElement.setAttribute("ondragover", "allowDrop(event)")
+    changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.parentElement.id))
+    document.getElementById("playableL").appendChild(document.getElementById(e.target.parentElement.id))
     checkvalid();
 }
+
+function done() {
+    var allwords = [];
+    if (row) {
+        for (var j = 0; j < changedFields.length; j++) {
+            var wordStartIndexV = changedFields[j] - 15;
+            while (changedFields.includes(wordStartIndexV) || board[wordStartIndexV] != null) {
+                wordStartIndexV -= 15;
+            }
+            cont = true
+            i = 15
+            word = "";
+            while (cont) {
+                if (changedFields.includes(wordStartIndexV + i)) {
+                    word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                } else if (board[wordStartIndexV + i] != null) {
+                    word += board[wordStartIndexV + i]
+                } else {
+                    cont = false
+                }
+                i += 15;
+            }
+            allwords.push(word)
+        }
+        var wordStartIndexH = changedFields[0] - 1;
+        while (changedFields.includes(wordStartIndexH) || board[wordStartIndexH] != null) {
+            wordStartIndexH--;
+        }
+
+        var cont = true
+        var i = 1
+        var word = "";
+        while (cont) {
+            if (changedFields.includes(wordStartIndexH + i)) {
+                word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+            } else if (board[wordStartIndexH + i] != null) {
+                word += board[wordStartIndexH + i]
+            } else {
+                cont = false
+            }
+            i++;
+        }
+        allwords.push(word)
+
+    } else if (column) {
+        for (var j = 0; j < changedFields.length; j++) {
+            var wordStartIndexH = changedFields[j] - 1;
+            while (changedFields.includes(wordStartIndexH) || board[wordStartIndexH] != null) {
+                wordStartIndexH--;
+            }
+
+            cont = true
+            i = 1
+            word = "";
+            while (cont) {
+                if (changedFields.includes(wordStartIndexH + i)) {
+                    word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                } else if (board[wordStartIndexH + i] != null) {
+                    word += board[wordStartIndexH + i]
+                } else {
+                    cont = false
+                }
+                i++;
+            }
+            allwords.push(word)
+
+        }
+
+
+        var wordStartIndexV = changedFields[0] - 15;
+        while (changedFields.includes(wordStartIndexV) || board[wordStartIndexV] != null) {
+            wordStartIndexV -= 15;
+        }
+        cont = true
+        i = 15
+        word = "";
+        while (cont) {
+            if (changedFields.includes(wordStartIndexV + i)) {
+                word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+            } else if (board[wordStartIndexV + i] != null) {
+                word += board[wordStartIndexV + i]
+            } else {
+                cont = false
+            }
+            i += 15;
+        }
+        allwords.push(word)
+    }
+    validwords = true;
+    for (item of allwords) {
+        if (!dictionary.includes(item) && item.length > 1) {
+            validwords = false;
+            console.log('"' + item + '"' + " invalid")
+        }
+        if (firstMove && changedFields.length == 1 && !dictionary.includes(item)) {
+            validwords = false
+            console.log('"' + item + '"' + " invalid")
+        }
+    }
+    if (validwords) {
+        if (firstMove) {
+            firstMove = false;
+        }
+        for (item of changedFields) {
+            document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
+            document.getElementById(item).childNodes[0].setAttribute("onclick", "")
+            document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
+            board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+        }
+        changedFields = [];
+        checkvalid();
+        console.log(board)
+    }
+}
+
+
+
 function checkvalid() {
+
+    row = true;
+    column = true;
+
     changedFields.sort((a, b) => a - b);
     document.getElementById("donebtn").disabled = true
     if (changedFields.length != 0) {
 
-        var row = true;
-        var column = true;
         var numberRow = Math.floor(changedFields[0] / 15);
         for (item of changedFields) {
             if (!(item >= (numberRow * 15) && item < (numberRow + 1) * 15)) {
@@ -72,8 +178,6 @@ function checkvalid() {
                 column = false;
             }
         }
-
-        console.log(row, column)
         if (row || column) {
             if (firstMove && changedFields.includes(112)) {
                 var adjacent = true
