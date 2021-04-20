@@ -1,10 +1,34 @@
 const board = new Array(225).fill(null);
-var bag = [""]
+var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "&Auml;_6", "J_6", "&Uuml;_6", "V_6", "&Ouml;_8", "X_8", "Q_10", "Y_10"]
 var changedFields = [];
 var draggedOrigin;
 var firstMove = true;
 var row;
 var column;
+var idIndex = 300;
+
+draw(8)
+
+function draw(x) {
+    for (let i = 0; i < x; i++) {
+        var letter = document.createElement("td");
+        var value = document.createElement("sub");
+        letter.setAttribute("id", idIndex);
+        idIndex++;
+        letter.setAttribute("class", "letter")
+        letter.setAttribute("draggable", "true")
+        letter.setAttribute("ondragstart", "drag(event)")
+        letter.setAttribute("onclick", "returnLetter(event)")
+
+        var item = bag[Math.floor(Math.random() * bag.length)];
+
+        letter.innerHTML = item.split("_")[0];
+        value.innerHTML = item.split("_")[1];
+
+        letter.appendChild(value);
+        document.getElementById("playableL").appendChild(letter);
+    }
+}
 
 function allowDrop(e) {
     e.preventDefault();
@@ -151,6 +175,7 @@ function done() {
             document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
             board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
         }
+        draw(changedFields.length)
         changedFields = [];
         checkvalid();
         console.log(board)
