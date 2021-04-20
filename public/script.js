@@ -11,7 +11,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const board = new Array(225).fill(null);
+var board = new Array(225).fill(null);
 var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "&Auml;_6", "J_6", "&Uuml;_6", "V_6", "&Ouml;_8", "X_8", "Q_10", "Y_10"]
 var changedFields = [];
 var draggedOrigin;
@@ -19,6 +19,26 @@ var firstMove = true;
 var row;
 var column;
 var idIndex = 300;
+var intervalID = window.setInterval(myCallback, 500);
+var lastRecalledVal
+var userID = 0;
+
+function myCallback() {
+    firebase.database().ref('turn').once('value').then(function (snapshot) {
+        if (snapshot.val() != lastRecalledVal) {
+            lastRecalledVal = snapshot.val();
+            if (lastRecalledVal == 0) {
+                window.clearInterval(intervalID);
+            }
+            firebase.database().ref('board/fields').once('value').then(function (snapshot2) {
+                board = snapshot2.val()
+            });
+            firebase.database().ref('bag/letters').once('value').then(function (snapshot3) {
+                bag = snapshot3.val()
+            });
+        }
+    });
+}
 
 draw(8)
 
@@ -202,6 +222,10 @@ function done() {
         firebase.database().ref("board").update({
             fields: board,
         });
+        firebase.database().ref("turn").update({
+            turn: "1",
+        });
+        intervalID = window.setInterval(myCallback, 500);
     }
 }
 
