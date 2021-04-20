@@ -11,22 +11,26 @@ draw(8)
 
 function draw(x) {
     for (let i = 0; i < x; i++) {
-        var letter = document.createElement("td");
-        var value = document.createElement("sub");
-        letter.setAttribute("id", idIndex);
-        idIndex++;
-        letter.setAttribute("class", "letter")
-        letter.setAttribute("draggable", "true")
-        letter.setAttribute("ondragstart", "drag(event)")
-        letter.setAttribute("onclick", "returnLetter(event)")
+        if (bag.length > 0) {
+            var letter = document.createElement("td");
+            var value = document.createElement("sub");
+            letter.setAttribute("id", idIndex);
+            idIndex++;
+            letter.setAttribute("class", "letter")
+            letter.setAttribute("draggable", "true")
+            letter.setAttribute("ondragstart", "drag(event)")
+            letter.setAttribute("onclick", "returnLetter(event)")
+            var index = Math.floor(Math.random() * bag.length)
+            var item = bag[index];
+            if (index > -1) {
+                bag.splice(index, 1);
+            }
+            letter.innerHTML = item.split("_")[0];
+            value.innerHTML = item.split("_")[1];
 
-        var item = bag[Math.floor(Math.random() * bag.length)];
-
-        letter.innerHTML = item.split("_")[0];
-        value.innerHTML = item.split("_")[1];
-
-        letter.appendChild(value);
-        document.getElementById("playableL").appendChild(letter);
+            letter.appendChild(value);
+            document.getElementById("playableL").appendChild(letter);
+        }
     }
 }
 
