@@ -1,3 +1,16 @@
+var firebaseConfig = {
+    apiKey: "AIzaSyBXHPCQrhyYFaGRzswjmFtiVHZGbCROu3w",
+    authDomain: "luca-bosch.firebaseapp.com",
+    databaseURL: "https://luca-bosch.firebaseio.com",
+    projectId: "luca-bosch",
+    storageBucket: "luca-bosch.appspot.com",
+    messagingSenderId: "892320182978",
+    appId: "1:892320182978:web:c9f4c49e23b9ff07c3015b",
+    measurementId: "G-NN1BG74T8T"
+};
+
+firebase.initializeApp(firebaseConfig);
+
 const board = new Array(225).fill(null);
 var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "&Auml;_6", "J_6", "&Uuml;_6", "V_6", "&Ouml;_8", "X_8", "Q_10", "Y_10"]
 var changedFields = [];
@@ -32,6 +45,9 @@ function draw(x) {
             document.getElementById("playableL").appendChild(letter);
         }
     }
+    firebase.database().ref("bag").update({
+        letters: bag,
+    });
 }
 
 function allowDrop(e) {
@@ -183,6 +199,9 @@ function done() {
         changedFields = [];
         checkvalid();
         console.log(board)
+        firebase.database().ref("board").update({
+            fields: board,
+        });
     }
 }
 
