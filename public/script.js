@@ -1,4 +1,5 @@
 const board = new Array(225).fill(null);
+var bag = [""]
 var changedFields = [];
 var draggedOrigin;
 var firstMove = true;
@@ -28,16 +29,16 @@ function drop(e) {
 }
 
 function returnLetter(e) {
-    e.target.parentElement.setAttribute("ondragover", "allowDrop(event)")
-    changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.id))
-    document.getElementById("playableL").appendChild(document.getElementById(e.target.id))
-    checkvalid();
-}
-
-function returnLetterSub(e) {
-    e.target.parentElement.parentElement.setAttribute("ondragover", "allowDrop(event)")
-    changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.parentElement.id))
-    document.getElementById("playableL").appendChild(document.getElementById(e.target.parentElement.id))
+    if (e.target.classList.contains("letter")) {
+        e.target.parentElement.setAttribute("ondragover", "allowDrop(event)")
+        changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.id))
+        document.getElementById("playableL").appendChild(document.getElementById(e.target.id))
+    }
+    else {
+        e.target.parentElement.parentElement.setAttribute("ondragover", "allowDrop(event)")
+        changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.parentElement.id))
+        document.getElementById("playableL").appendChild(document.getElementById(e.target.parentElement.id))
+    }
     checkvalid();
 }
 
