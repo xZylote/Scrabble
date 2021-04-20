@@ -11,6 +11,11 @@ body {
     position: relative;
 }
 
+.container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
 .board {
     display: flex;
     flex-direction: column;
@@ -39,6 +44,7 @@ sub {
     color: black;
     -webkit-text-stroke: 0;
 }
+
 .letter {
     background-color: white;
     width: 50px;
@@ -71,10 +77,10 @@ sub {
 }
 
 #donebtn {
-    margin-top: 5px;
-    margin-left: 5px;
+    font-size: 2rem;
+    color: white;
     width: 100px;
-    height: 10px;
+    height: 100px;
 }
 
 .setInStone {
