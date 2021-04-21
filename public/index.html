@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script defer src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.4.1/firebase-messaging.js"></script>
     <script defer src="words.js"></script>
     <script defer src="script.js"></script>
     <title>Scrabble</title>
@@ -15,7 +16,7 @@
     <div class="container">
         <div class="button-container">
             <button id="donebtn" class="button" disabled="true" onclick="done()">Done</button>
-            <button class="button" onclick="draw(3)">Reroll</button> 
+            <button class="button" onclick="draw(3)">Reroll</button>
         </div>
         <div class="center-column">
             <div class="letters">

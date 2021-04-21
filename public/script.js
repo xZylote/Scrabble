@@ -20,18 +20,47 @@ var row;
 var column;
 var idIndex = 300;
 var intervalID = window.setInterval(myCallback, 500);
-var lastRecalledVal
+var lastRecalledVal = "a";
 var userID = 0;
+
+function loadBoard() {
+    console.log(board.length)
+    for (let i = 0; i < board.length; i++) {
+        console.log("loaded board")
+        if (board[i] != null) {
+            console.log("loaded board")
+            var letter = document.createElement("td");
+            var value = document.createElement("sub");
+            letter.setAttribute("id", idIndex + 1000);
+            idIndex++;
+            letter.setAttribute("class", "letter")
+            letter.classList.add("setInStone")
+            letter.appendChild(value);
+            value.innerHTML = "47";
+            letter.innerHTML = board[i];
+            document.getElementById(i).innerHTML = "";
+            document.getElementById(i).appendChild(letter)
+            firstMove = false
+        }
+    }
+}
 
 function myCallback() {
     firebase.database().ref('turn').once('value').then(function (snapshot) {
-        if (snapshot.val() != lastRecalledVal) {
-            lastRecalledVal = snapshot.val();
-            if (lastRecalledVal == 0) {
+        if (snapshot.val().turn != lastRecalledVal) {
+            console.log(snapshot.val().turn)
+            lastRecalledVal = snapshot.val().turn;
+            if (lastRecalledVal == userID) {
                 window.clearInterval(intervalID);
             }
             firebase.database().ref('board/fields').once('value').then(function (snapshot2) {
-                board = snapshot2.val()
+                console.log("updated board")
+                board = new Array(225).fill(null);
+                for (item in snapshot2.val()) {
+                    board[item] = snapshot2.val()[item];
+                }
+                console.log(board)
+                loadBoard();
             });
             firebase.database().ref('bag/letters').once('value').then(function (snapshot3) {
                 bag = snapshot3.val()
@@ -205,29 +234,34 @@ function done() {
         }
     }
     if (validwords) {
-        if (firstMove) {
-            firstMove = false;
+        if (lastRecalledVal == userID) {
+            if (firstMove) {
+                firstMove = false;
+            }
+            for (item of changedFields) {
+                document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
+                document.getElementById(item).childNodes[0].setAttribute("onclick", "")
+                document.getElementById(item).childNodes[0].classList.add("setInStone")
+                document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
+                board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+            }
+            draw(changedFields.length)
+            changedFields = [];
+            checkvalid();
+            console.log(board)
+            firebase.database().ref("board").update({
+                fields: board,
+            });
+            firebase.database().ref("turn").update({
+                turn: 1,
+            });
+            intervalID = window.setInterval(myCallback, 500);
+        } else {
+            console.log("It's not your turn")
         }
-        for (item of changedFields) {
-            document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
-            document.getElementById(item).childNodes[0].setAttribute("onclick", "")
-            document.getElementById(item).childNodes[0].classList.add("setInStone")
-            document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
-            board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
-        }
-        draw(changedFields.length)
-        changedFields = [];
-        checkvalid();
-        console.log(board)
-        firebase.database().ref("board").update({
-            fields: board,
-        });
-        firebase.database().ref("turn").update({
-            turn: "1",
-        });
-        intervalID = window.setInterval(myCallback, 500);
     }
 }
+
 
 
 
