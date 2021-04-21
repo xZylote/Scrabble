@@ -15,8 +15,29 @@
 <body>
     <div class="container">
         <div class="button-container">
-            <button id="donebtn" class="button" disabled="true" onclick="done()">Done</button>
-            <button class="button" onclick="draw(3)">Reroll</button>
+            <div id="controls" style="display: none;">
+                <button id="donebtn" class="button" disabled="true" onclick="done()">Done</button>
+                <button id="rerollbtn" class="button" onclick="replace()">Reroll</button>
+            </div>
+            <div id="settings">
+                Players:&nbsp;
+                <select name="Players" id="playerNumber">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <br>
+                Your ID:
+                <select name="ID" id="userID">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <br>
+                <button id="confirmbtn" onclick="confirm()">Confirm</button>
+            </div>
         </div>
         <div class="center-column">
             <div class="letters">

@@ -43,6 +43,7 @@ sub {
     user-select: none;
     color: black;
     -webkit-text-stroke: 0;
+    pointer-events: none;
 }
 
 .letter {
@@ -85,7 +86,9 @@ sub {
     border: none;
     border-radius: 5px;
 }
-
+.selected {
+    background-color: red !important;
+}
 .button:hover {
     background: #9e9e99;
 }
