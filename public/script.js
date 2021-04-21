@@ -113,7 +113,19 @@ function donereroll() {
         for (let i = 0; i < lettersputback.length; i++) {
             bag.push(lettersputback[i])
         }
-        console.log(bag)
+        document.getElementById("donebtn").setAttribute("onclick", "done()")
+        document.getElementById("donebtn").disabled = true
+        document.getElementById("rerollbtn").style.background = "#054d05"
+        var letters = document.getElementsByClassName("letter");
+        for (item of letters) {
+            if (!item.classList.contains("setInStone")) {
+                item.setAttribute("onclick", "returnLetter(event)")
+            }
+            if (item.classList.contains("selected")) {
+                item.classList.remove("selected")
+            }
+        }
+        rerollOn = false
 
         if (userID == playerNumber) {
             firebase.database().ref("/").update({
