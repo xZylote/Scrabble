@@ -33,7 +33,7 @@ function resetBoard() {
     firebase.database().ref("/").update({
         board: board,
     });
-    console.log("shalom")
+    window.location.reload();
 }
 function confirm() {
     document.getElementById("userID").setAttribute("disabled", true);
