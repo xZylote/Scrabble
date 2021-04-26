@@ -27,6 +27,14 @@ var rerollOn = false;
 var tbr = [];
 myCallback()
 
+function resetBoard() {
+    board = new Array(225).fill(null);
+    loadBoard();
+    firebase.database().ref("/").update({
+        board: board,
+    });
+    console.log("shalom")
+}
 function confirm() {
     document.getElementById("userID").setAttribute("disabled", true);
     document.getElementById("playerNumber").setAttribute("disabled", true);
@@ -38,6 +46,8 @@ function confirm() {
     document.getElementById("settings").style.display = "none";
     document.getElementById("controls").style.display = "inline";
 }
+
+
 
 function loadBoard() {
     for (let i = 0; i < board.length; i++) {
