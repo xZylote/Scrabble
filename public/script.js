@@ -23,6 +23,7 @@ var idIndex = 300
 var lastRecalledVal = "a"
 
 refresh()
+draw(8)
 
 function resetBoard() {
     board = new Array(225)
@@ -97,6 +98,7 @@ function replace() {
         rerollOn = false
     }
 }
+
 function turnRed(e) {
     if (!e.target.classList.contains("selected")) {
         e.target.classList.add("selected")
@@ -106,6 +108,7 @@ function turnRed(e) {
         toBeRemoved = toBeRemoved.filter(item => item !== e.target.id)
     }
 }
+
 function donereroll() {
     if (lastRecalledVal == userID) {
         if (firstMove) {
@@ -158,6 +161,7 @@ function donereroll() {
         console.log("It's not your turn")
     }
 }
+
 function refresh() {
     firebase.database().ref('turn').once('value').then(function (snapshot) {
         if (snapshot.val() != lastRecalledVal) {
@@ -183,8 +187,6 @@ function refresh() {
         }
     })
 }
-
-draw(8)
 
 function draw(x) {
     for (let i = 0; i < x; i++) {
@@ -409,9 +411,6 @@ function done() {
     }
 }
 
-
-
-
 function checkvalid() {
 
     row = true
@@ -479,7 +478,7 @@ function checkvalid() {
                             connected = true
                         }
                     }
-                    
+
                     if (adjacent && connected) {
                         document.getElementById("donebtn").disabled = false
                     }
