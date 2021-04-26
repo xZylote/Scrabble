@@ -7,61 +7,57 @@ var firebaseConfig = {
     messagingSenderId: "892320182978",
     appId: "1:892320182978:web:c9f4c49e23b9ff07c3015b",
     measurementId: "G-NN1BG74T8T"
-};
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-var board = new Array(225).fill(null);
+var board = new Array(225)
 var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "J_6", "V_6", "X_8", "Q_10", "Y_10"]
-var changedFields = [];
-var draggedOrigin;
-var firstMove = true;
-var row;
-var column;
-var idIndex = 300;
-var lastRecalledVal = "a";
-var userID;
-var playerNumber;
-var intervalID;
-var rerollOn = false;
-var tbr = [];
-myCallback()
+
+var draggedOrigin, row, column, userID, playerNumber, intervalID
+var changedFields = []
+var toBeRemoved = []
+var firstMove = true
+var rerollOn = false
+var idIndex = 300
+var lastRecalledVal = "a"
+
+refresh()
 
 function resetBoard() {
-    board = new Array(225).fill(null);
-    loadBoard();
+    board = new Array(225)
+    loadBoard()
     firebase.database().ref("/").update({
         board: board,
-    });
-    window.location.reload();
+    })
+    window.location.reload()
 }
+
 function confirm() {
-    document.getElementById("userID").setAttribute("disabled", true);
-    document.getElementById("playerNumber").setAttribute("disabled", true);
-    document.getElementById("confirmbtn").setAttribute("disabled", true);
-    userID = document.getElementById("userID").value;
-    playerNumber = document.getElementById("playerNumber").value;
+    document.getElementById("userID").setAttribute("disabled", true)
+    document.getElementById("playerNumber").setAttribute("disabled", true)
+    document.getElementById("confirmbtn").setAttribute("disabled", true)
+    userID = document.getElementById("userID").value
+    playerNumber = document.getElementById("playerNumber").value
     console.log(userID, playerNumber)
-    intervalID = window.setInterval(myCallback, 1000);
-    document.getElementById("settings").style.display = "none";
-    document.getElementById("controls").style.display = "inline";
+    intervalID = window.setInterval(refresh, 1000)
+    document.getElementById("settings").style.display = "none"
+    document.getElementById("controls").style.display = "inline"
 }
-
-
 
 function loadBoard() {
     for (let i = 0; i < board.length; i++) {
         if (board[i] != null) {
-            var letter = document.createElement("td");
-            var value = document.createElement("sub");
-            letter.setAttribute("id", idIndex + 1000);
-            idIndex++;
+            var letter = document.createElement("td")
+            var value = document.createElement("sub")
+            letter.setAttribute("id", idIndex + 1000)
+            idIndex++
             letter.setAttribute("class", "letter")
             letter.classList.add("setInStone")
-            value.innerHTML = "47";
-            letter.appendChild(value);
-            letter.innerHTML = board[i];
-            document.getElementById(i).innerHTML = "";
+            value.innerHTML = "47"
+            letter.appendChild(value)
+            letter.innerHTML = board[i]
+            document.getElementById(i).innerHTML = ""
             document.getElementById(i).appendChild(letter)
             firstMove = false
         }
@@ -74,18 +70,21 @@ function replace() {
         document.getElementById("donebtn").setAttribute("onclick", "donereroll()")
         document.getElementById("donebtn").disabled = false
         document.getElementById("rerollbtn").style.background = "red"
-        var letters = document.getElementsByClassName("letter");
+        var letters = document.getElementsByClassName("letter")
+
         for (item of letters) {
             if (!item.classList.contains("setInStone")) {
                 item.setAttribute("onclick", "turnRed(event)")
             }
         }
+
         rerollOn = true
     } else {
         document.getElementById("donebtn").setAttribute("onclick", "done()")
         document.getElementById("donebtn").disabled = true
         document.getElementById("rerollbtn").style.background = "#054d05"
-        var letters = document.getElementsByClassName("letter");
+        var letters = document.getElementsByClassName("letter")
+
         for (item of letters) {
             if (!item.classList.contains("setInStone")) {
                 item.setAttribute("onclick", "returnLetter(event)")
@@ -94,39 +93,44 @@ function replace() {
                 item.classList.remove("selected")
             }
         }
+
         rerollOn = false
     }
 }
 function turnRed(e) {
     if (!e.target.classList.contains("selected")) {
         e.target.classList.add("selected")
-        tbr.push(e.target.id)
+        toBeRemoved.push(e.target.id)
     } else {
         e.target.classList.remove("selected")
-        tbr = tbr.filter(item => item !== e.target.id)
+        toBeRemoved = toBeRemoved.filter(item => item !== e.target.id)
     }
 }
 function donereroll() {
     if (lastRecalledVal == userID) {
         if (firstMove) {
-            firstMove = false;
+            firstMove = false
         }
+
         document.getElementById("rerollbtn").style.background = "#054d05"
-        var letters = document.getElementsByClassName("selected");
-        var lettersputback = [];
+        var letters = document.getElementsByClassName("selected")
+        var lettersputback = []
+
         for (let i = letters.length - 1; i >= 0; i--) {
             console.log(letters.item(i).innerHTML)
             lettersputback.push(letters.item(i).innerHTML.replace("<sub>", "_").replace("</sub>", ""))
-            document.getElementById("playableL").removeChild(letters.item(i));
+            document.getElementById("playableL").removeChild(letters.item(i))
             draw(1)
         }
+
         for (let i = 0; i < lettersputback.length; i++) {
             bag.push(lettersputback[i])
         }
+
         document.getElementById("donebtn").setAttribute("onclick", "done()")
         document.getElementById("donebtn").disabled = true
         document.getElementById("rerollbtn").style.background = "#054d05"
-        var letters = document.getElementsByClassName("letter");
+        var letters = document.getElementsByClassName("letter")
         for (item of letters) {
             if (!item.classList.contains("setInStone")) {
                 item.setAttribute("onclick", "returnLetter(event)")
@@ -135,45 +139,49 @@ function donereroll() {
                 item.classList.remove("selected")
             }
         }
+
         rerollOn = false
 
         if (userID == playerNumber) {
             firebase.database().ref("/").update({
                 turn: 1,
-            });
+            })
         } else {
-            userIDinc = userID;
-            userIDinc++;
+            userIDinc = userID
+            userIDinc++
             firebase.database().ref("/").update({
                 turn: parseInt(userIDinc),
-            });
+            })
         }
-        intervalID = window.setInterval(myCallback, 1000);
+        intervalID = window.setInterval(refresh, 1000)
     } else {
         console.log("It's not your turn")
     }
 }
-function myCallback() {
+function refresh() {
     firebase.database().ref('turn').once('value').then(function (snapshot) {
         if (snapshot.val() != lastRecalledVal) {
             console.log(snapshot.val())
-            lastRecalledVal = snapshot.val();
+            lastRecalledVal = snapshot.val()
+
             if (lastRecalledVal == userID) {
-                window.clearInterval(intervalID);
+                window.clearInterval(intervalID)
             }
+
             firebase.database().ref('board').once('value').then(function (snapshot2) {
                 console.log("received board")
-                board = new Array(225).fill(null);
+                board = new Array(225).fill(null)
+
                 for (item in snapshot2.val()) {
-                    board[item] = snapshot2.val()[item];
+                    board[item] = snapshot2.val()[item]
                 }
-                loadBoard();
-            });
+                loadBoard()
+            })
             firebase.database().ref('bag').once('value').then(function (snapshot3) {
                 bag = snapshot3.val()
-            });
+            })
         }
-    });
+    })
 }
 
 draw(8)
@@ -181,192 +189,220 @@ draw(8)
 function draw(x) {
     for (let i = 0; i < x; i++) {
         if (bag.length > 0) {
-            var letter = document.createElement("td");
-            var value = document.createElement("sub");
-            letter.setAttribute("id", idIndex);
-            idIndex++;
+            var letter = document.createElement("td")
+            var value = document.createElement("sub")
+            letter.setAttribute("id", idIndex)
+            idIndex++
             letter.setAttribute("class", "letter")
             letter.setAttribute("draggable", "true")
             letter.setAttribute("ondragstart", "drag(event)")
             letter.setAttribute("onclick", "returnLetter(event)")
             var index = Math.floor(Math.random() * bag.length)
-            var item = bag[index];
-            if (index > -1) {
-                bag.splice(index, 1);
-            }
-            letter.innerHTML = item.split("_")[0];
-            value.innerHTML = item.split("_")[1];
+            var item = bag[index]
 
-            letter.appendChild(value);
-            document.getElementById("playableL").appendChild(letter);
+            if (index > -1) {
+                bag.splice(index, 1)
+            }
+
+            letter.innerHTML = item.split("_")[0]
+            value.innerHTML = item.split("_")[1]
+
+            letter.appendChild(value)
+            document.getElementById("playableL").appendChild(letter)
         }
     }
     firebase.database().ref("/").update({
         bag: bag,
-    });
+    })
 }
 
 function allowDrop(e) {
-    e.preventDefault();
+    e.preventDefault()
 }
 
 function drag(e) {
-    e.dataTransfer.setData("text", e.target.id);
-    draggedOrigin = e.target.parentElement;
+    e.dataTransfer.setData("text", e.target.id)
+    draggedOrigin = e.target.parentElement
 }
 
 function drop(e) {
-    e.preventDefault();
+    e.preventDefault()
     changedFields = changedFields.filter(item => item !== parseInt(draggedOrigin.id))
     draggedOrigin.setAttribute("ondragover", "allowDrop(event)")
-    var data = e.dataTransfer.getData("text");
+    var data = e.dataTransfer.getData("text")
+
     if (e.target.id != data) {
-        e.target.appendChild(document.getElementById(data));
-        changedFields.push(parseInt(e.target.id));
-        e.target.ondragover = "";
+        e.target.appendChild(document.getElementById(data))
+        changedFields.push(parseInt(e.target.id))
+        e.target.ondragover = ""
     }
-    checkvalid();
+
+    checkvalid()
 }
 
 function returnLetter(e) {
     e.target.parentElement.setAttribute("ondragover", "allowDrop(event)")
     changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.id))
     document.getElementById("playableL").appendChild(document.getElementById(e.target.id))
-    checkvalid();
+    checkvalid()
 }
 
 function done() {
-    var allwords = [];
+    var allwords = []
     if (row) {
         for (var j = 0; j < changedFields.length; j++) {
-            var wordStartIndexV = changedFields[j] - 15;
+            var wordStartIndexV = changedFields[j] - 15
+
             while (changedFields.includes(wordStartIndexV) || board[wordStartIndexV] != null) {
-                wordStartIndexV -= 15;
+                wordStartIndexV -= 15
             }
+
             cont = true
             i = 15
-            word = "";
+            word = ""
+
             while (cont) {
                 if (changedFields.includes(wordStartIndexV + i)) {
-                    word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                    word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
                 } else if (board[wordStartIndexV + i] != null) {
                     word += board[wordStartIndexV + i]
                 } else {
                     cont = false
                 }
-                i += 15;
+
+                i += 15
             }
+
             allwords.push(word)
         }
-        var wordStartIndexH = changedFields[0] - 1;
+        var wordStartIndexH = changedFields[0] - 1
+
         while (changedFields.includes(wordStartIndexH) || board[wordStartIndexH] != null) {
-            wordStartIndexH--;
+            wordStartIndexH--
         }
 
         var cont = true
         var i = 1
-        var word = "";
+        var word = ""
+
         while (cont) {
             if (changedFields.includes(wordStartIndexH + i)) {
-                word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
             } else if (board[wordStartIndexH + i] != null) {
                 word += board[wordStartIndexH + i]
             } else {
                 cont = false
             }
-            i++;
+
+            i++
         }
+
         allwords.push(word)
 
     } else if (column) {
         for (var j = 0; j < changedFields.length; j++) {
-            var wordStartIndexH = changedFields[j] - 1;
+            var wordStartIndexH = changedFields[j] - 1
+
             while (changedFields.includes(wordStartIndexH) || board[wordStartIndexH] != null) {
-                wordStartIndexH--;
+                wordStartIndexH--
             }
 
             cont = true
             i = 1
-            word = "";
+            word = ""
+
             while (cont) {
                 if (changedFields.includes(wordStartIndexH + i)) {
-                    word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                    word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
                 } else if (board[wordStartIndexH + i] != null) {
                     word += board[wordStartIndexH + i]
                 } else {
                     cont = false
                 }
-                i++;
+
+                i++
             }
+
             allwords.push(word)
-
         }
 
+        var wordStartIndexV = changedFields[0] - 15
 
-        var wordStartIndexV = changedFields[0] - 15;
         while (changedFields.includes(wordStartIndexV) || board[wordStartIndexV] != null) {
-            wordStartIndexV -= 15;
+            wordStartIndexV -= 15
         }
+
         cont = true
         i = 15
-        word = "";
+        word = ""
+
         while (cont) {
             if (changedFields.includes(wordStartIndexV + i)) {
-                word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
             } else if (board[wordStartIndexV + i] != null) {
                 word += board[wordStartIndexV + i]
             } else {
                 cont = false
             }
-            i += 15;
+
+            i += 15
         }
         allwords.push(word)
     }
-    validwords = true;
+
+    validwords = true
+
     for (item of allwords) {
         console.log(item)
+
         if (!dictionary.includes(item) && item.length > 1) {
-            validwords = false;
+            validwords = false
             console.log('"' + item + '"' + " invalid")
         }
+
         if (firstMove && changedFields.length == 1 && !dictionary.includes(item)) {
             validwords = false
             console.log('"' + item + '"' + " invalid")
         }
     }
+
     if (validwords) {
         if (lastRecalledVal == userID) {
             if (firstMove) {
-                firstMove = false;
+                firstMove = false
             }
+
             for (item of changedFields) {
                 document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
                 document.getElementById(item).childNodes[0].setAttribute("onclick", "")
                 document.getElementById(item).childNodes[0].classList.add("setInStone")
                 document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
-                board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1);
+                board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
             }
+
             draw(changedFields.length)
-            changedFields = [];
-            checkvalid();
+            changedFields = []
+            checkvalid()
             console.log(board)
             firebase.database().ref("/").update({
                 board: board,
-            });
+            })
             console.log("sent board")
+
             if (userID == playerNumber) {
                 firebase.database().ref("/").update({
                     turn: 1,
-                });
+                })
             } else {
-                userIDinc = userID;
-                userIDinc++;
+                userIDinc = userID
+                userIDinc++
                 firebase.database().ref("/").update({
                     turn: parseInt(userIDinc),
-                });
+                })
 
             }
-            intervalID = window.setInterval(myCallback, 1000);
+
+            intervalID = window.setInterval(refresh, 1000)
         } else {
             console.log("It's not your turn")
         }
@@ -378,33 +414,36 @@ function done() {
 
 function checkvalid() {
 
-    row = true;
-    column = true;
+    row = true
+    column = true
 
-    changedFields.sort((a, b) => a - b);
+    changedFields.sort((a, b) => a - b)
     document.getElementById("donebtn").disabled = true
     if (changedFields.length != 0) {
 
-        var numberRow = Math.floor(changedFields[0] / 15);
+        var numberRow = Math.floor(changedFields[0] / 15)
         for (item of changedFields) {
             if (!(item >= (numberRow * 15) && item < (numberRow + 1) * 15)) {
-                row = false;
+                row = false
             }
         }
 
         for (item of changedFields) {
             if (item % 15 != changedFields[0] % 15) {
-                column = false;
+                column = false
             }
         }
+
         if (row || column) {
             if (firstMove && changedFields.includes(112)) {
                 var adjacent = true
+
                 for (item of changedFields) {
                     if (!(changedFields.includes(item + 1) || changedFields.includes(item - 1) || changedFields.includes(item + 15) || changedFields.includes(item - 15))) {
                         adjacent = false
                     }
                 }
+
                 if (adjacent || changedFields.length == 1) {
                     document.getElementById("donebtn").disabled = false
                 }
@@ -415,7 +454,7 @@ function checkvalid() {
                     }
                 } else {
                     var connected = false
-                    var adjacent = true;
+                    var adjacent = true
                     if (row && !column) {
                         for (var i = 0; i < changedFields.length; i++) {
                             if (!((board[changedFields[i] + 1] != null || changedFields.includes(changedFields[i] + 1)) || (board[changedFields[i] - 1] != null || changedFields.includes(changedFields[i] - 1)))) {
@@ -424,22 +463,23 @@ function checkvalid() {
                         }
 
                     } else if (column && !row) {
-                        var adjacent = true;
+                        var adjacent = true
                         for (var i = 0; i < changedFields.length; i++) {
                             if (!((board[changedFields[i] + 15] != null || changedFields.includes(changedFields[i] + 15)) || (board[changedFields[i] - 15] != null || changedFields.includes(changedFields[i] - 15)))) {
                                 adjacent = false
                             }
                         }
 
-                    }
-                    else {
+                    } else {
                         alert("something went wrong")
                     }
+
                     for (item of changedFields) {
                         if (board[item + 1] != null || board[item - 1] != null || board[item + 15] != null || board[item - 15] != null) {
-                            connected = true;
+                            connected = true
                         }
                     }
+                    
                     if (adjacent && connected) {
                         document.getElementById("donebtn").disabled = false
                     }
