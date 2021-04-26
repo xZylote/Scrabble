@@ -15,6 +15,7 @@ var board = new Array(225)
 var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "J_6", "V_6", "X_8", "Q_10", "Y_10"]
 
 var draggedOrigin, row, column, userID, playerNumber, intervalID
+var scores = []
 var changedFields = []
 var toBeRemoved = []
 var firstMove = true
@@ -24,6 +25,17 @@ var lastRecalledVal = "a"
 
 refresh()
 draw(8)
+
+function updateScore(words) {
+    for (item in words) {
+
+        if (words[item].length > 1) {
+            console.log(words[item]);
+            scores[userID - 1]++;
+            console.log(scores);
+        }
+    }
+}
 
 function resetBoard() {
     board = new Array(225)
@@ -44,6 +56,13 @@ function confirm() {
     intervalID = window.setInterval(refresh, 1000)
     document.getElementById("settings").style.display = "none"
     document.getElementById("controls").style.display = "inline"
+    for (let i = 0; i < playerNumber; i++) {
+        var player = document.createElement("tr")
+        player.innerHTML = "Player " + (i + 1) + ": ";
+        document.getElementById("scoreList").appendChild(player);
+        scores.push(0);
+    }
+
 }
 
 function loadBoard() {
@@ -355,7 +374,6 @@ function done() {
     validwords = true
 
     for (item of allwords) {
-        console.log(item)
 
         if (!dictionary.includes(item) && item.length > 1) {
             validwords = false
@@ -370,6 +388,7 @@ function done() {
 
     if (validwords) {
         if (lastRecalledVal == userID) {
+            updateScore(allwords);
             if (firstMove) {
                 firstMove = false
             }
