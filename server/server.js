@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
         }
         io.emit('newPlayerAnnouncement', value)
         io.emit('playerListUpdate', players);
+        io.emit('turnResponse', turn);
     });
 
     socket.on('setBoard', (value) => {

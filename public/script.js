@@ -28,6 +28,18 @@ socket.on('boardResponse', (res) => {
 })
 socket.on('turnResponse', (res) => {
     turn = res
+    colorActivePlayer()
+    if (turn != username) {
+        for (let i = 0; i < board.length; i++) {
+            document.getElementById(i).ondragover = ""
+        }
+    } else {
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] == null) {
+                document.getElementById(i).setAttribute("ondragover", "allowDrop(event)")
+            }
+        }
+    }
 });
 socket.on('bagResponse', (res) => {
     bag = res
@@ -88,15 +100,14 @@ function loadBoard() {
     for (let i = 0; i < board.length; i++) {
         if (board[i] != null) {
             var letter = document.createElement("td")
-            var value = document.createElement("sub")
             letter.setAttribute("id", idIndex + 1000)
             idIndex++
             letter.setAttribute("class", "letter")
             letter.classList.add("setInStone")
-            value.innerHTML = "47"
-            //TODO ?? 47 ??
-            letter.appendChild(value)
             letter.innerHTML = board[i]
+            console.log(letter)
+            console.log(letter.childNodes[0])
+            document.getElementById(i).ondragover = ""
             document.getElementById(i).innerHTML = ""
             document.getElementById(i).appendChild(letter)
             firstMove = false
@@ -153,44 +164,47 @@ function turnRed(e) {
 
 // Finish swapping letters
 function donereroll() {
-
-    if (turn == username) {
-
-        document.getElementById("rerollbtn").style.background = "#054d05"
-        document.getElementById("rerollbtn").textContent = "Reroll"
-        var letters = document.getElementsByClassName("selected")
-        var lettersputback = []
-
-        for (let i = letters.length - 1; i >= 0; i--) {
-            console.log(letters.item(i).innerHTML)
-            lettersputback.push(letters.item(i).innerHTML.replace("<sub>", "_").replace("</sub>", ""))
-            document.getElementById("playableL").removeChild(letters.item(i))
-            draw(1)
-        }
-
-        for (let i = 0; i < lettersputback.length; i++) {
-            bag.push(lettersputback[i])
-        }
-
-        document.getElementById("donebtn").setAttribute("onclick", "done()")
-        document.getElementById("donebtn").disabled = true
-        document.getElementById("rerollbtn").style.background = "#054d05"
-        var letters = document.getElementsByClassName("letter")
-        for (item of letters) {
-            if (!item.classList.contains("setInStone")) {
-                item.setAttribute("onclick", "returnLetter(event)")
-            }
-            if (item.classList.contains("selected")) {
-                item.classList.remove("selected")
-            }
-        }
-
-        rerollOn = false
-
-        socket.emit('done', username);
-
+    if (changedFields.length > 0) {
+        alert("Before doing that, you need to pick up all letters from the board")
     } else {
-        document.getElementById("chat").innerHTML += "<br>" + "It's not your turn"
+        if (turn == username) {
+
+            document.getElementById("rerollbtn").style.background = "#054d05"
+            document.getElementById("rerollbtn").textContent = "Reroll"
+            var letters = document.getElementsByClassName("selected")
+            var lettersputback = []
+
+            for (let i = letters.length - 1; i >= 0; i--) {
+                console.log(letters.item(i).innerHTML)
+                lettersputback.push(letters.item(i).innerHTML.replace("<sub>", "_").replace("</sub>", ""))
+                document.getElementById("playableL").removeChild(letters.item(i))
+                draw(1)
+            }
+
+            for (let i = 0; i < lettersputback.length; i++) {
+                bag.push(lettersputback[i])
+            }
+
+            document.getElementById("donebtn").setAttribute("onclick", "done()")
+            document.getElementById("donebtn").disabled = true
+            document.getElementById("rerollbtn").style.background = "#054d05"
+            var letters = document.getElementsByClassName("letter")
+            for (item of letters) {
+                if (!item.classList.contains("setInStone")) {
+                    item.setAttribute("onclick", "returnLetter(event)")
+                }
+                if (item.classList.contains("selected")) {
+                    item.classList.remove("selected")
+                }
+            }
+
+            rerollOn = false
+
+            socket.emit('done', username);
+
+        } else {
+            document.getElementById("chat").innerHTML += "<br>" + "It's not your turn"
+        }
     }
 }
 
@@ -236,18 +250,20 @@ function drag(e) {
 }
 
 function drop(e) {
-    e.preventDefault()
-    changedFields = changedFields.filter(item => item !== parseInt(draggedOrigin.id))
-    draggedOrigin.setAttribute("ondragover", "allowDrop(event)")
-    var data = e.dataTransfer.getData("text")
+    if (turn == username) {
+        e.preventDefault()
+        changedFields = changedFields.filter(item => item !== parseInt(draggedOrigin.id))
+        draggedOrigin.setAttribute("ondragover", "allowDrop(event)")
+        var data = e.dataTransfer.getData("text")
 
-    if (e.target.id != data) {
-        e.target.appendChild(document.getElementById(data))
-        changedFields.push(parseInt(e.target.id))
-        e.target.ondragover = ""
+        if (e.target.id != data) {
+            e.target.appendChild(document.getElementById(data))
+            changedFields.push(parseInt(e.target.id))
+            e.target.ondragover = ""
+        }
+
+        checkvalid()
     }
-
-    checkvalid()
 }
 
 // Click on letter to put it back 
@@ -494,9 +510,13 @@ function checkvalid() {
 
 document.getElementById("chatfield").addEventListener("keyup", function (event) {
     if (event.key === 'Enter') {
-        socket.emit('say', username + " (" + date.getHours() + ":"
-            + date.getMinutes() + ") - " + document.getElementById("chatfield").value);
-        document.getElementById("chatfield").value = ""
+        if (document.getElementById("chatfield").value == "/reset") {
+            reset()
+        } else {
+            socket.emit('say', username + " (" + date.getHours() + ":"
+                + date.getMinutes() + ") - " + document.getElementById("chatfield").value);
+            document.getElementById("chatfield").value = ""
+        }
     }
 });
 
@@ -518,11 +538,26 @@ window.addEventListener("beforeunload", function (e) {
     socket.emit('dc', username);
 });
 
-if (localStorage.getItem('username')) {
+/* if (localStorage.getItem('username')) {
     username = localStorage.getItem('username')
     document.getElementById("username").style.display = "none";
     document.getElementById("alleee").style.display = "grid";
     socket.emit('playerconnect', username);
     refresh()
     draw(8)
+} */
+
+function colorActivePlayer() {
+    var playerlist = document.getElementById("players").getElementsByTagName("li");
+    for (player of playerlist) {
+        if (turn == player.innerText) {
+            player.style.backgroundColor = "red"
+        } else {
+            player.style.backgroundColor = "#242424"
+        }
+    }
+}
+
+function start() {
+    document.getElementById("startbtn").style.display = "none"
 }
