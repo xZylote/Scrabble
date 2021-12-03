@@ -1,70 +1,89 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyBXHPCQrhyYFaGRzswjmFtiVHZGbCROu3w",
-    authDomain: "luca-bosch.firebaseapp.com",
-    databaseURL: "https://luca-bosch.firebaseio.com",
-    projectId: "luca-bosch",
-    storageBucket: "luca-bosch.appspot.com",
-    messagingSenderId: "892320182978",
-    appId: "1:892320182978:web:c9f4c49e23b9ff07c3015b",
-    measurementId: "G-NN1BG74T8T"
-}
-
-firebase.initializeApp(firebaseConfig)
-
+const date = new Date();
+const socket = io('ws://localhost:8080')
 var board = new Array(225)
 var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "J_6", "V_6", "X_8", "Q_10", "Y_10"]
 
-var draggedOrigin, row, column, userID, playerNumber, intervalID
+var draggedOrigin, row, column, turn, username
 var scores = []
 var changedFields = []
 var toBeRemoved = []
 var firstMove = true
 var rerollOn = false
 var idIndex = 300
-var lastRecalledVal = "a"
 
-refresh()
-draw(8)
-
-function updateScore(words) {
-    for (item in words) {
-
-        if (words[item].length > 1) {
-            console.log(words[item]);
-            scores[userID - 1]++;
-            console.log(scores);
-        }
-    }
+// Pull all data from the server and overwrite local game
+function refresh() {
+    socket.emit('getUpdate')
 }
 
-function resetBoard() {
-    board = new Array(225)
+// Handle data from the server
+
+socket.on('boardResponse', (res) => {
+    console.log("received board")
+    board = new Array(225).fill(null)
+    for (item in res) {
+        board[item] = res[item]
+    }
     loadBoard()
-    firebase.database().ref("/").update({
-        board: board,
-    })
+})
+socket.on('turnResponse', (res) => {
+    turn = res
+});
+socket.on('bagResponse', (res) => {
+    bag = res
+})
+socket.on('scoreResponse', (res) => {
+    scores = res
+})
+
+socket.on('playerListUpdate', (res) => {
+    document.getElementById("players").innerHTML = ""
+    for (item of res) {
+        var player = document.createElement("li")
+        player.innerHTML = item
+        document.getElementById("players").appendChild(player)
+    }
+})
+socket.on('newPlayerAnnouncement', (res) => {
+    document.getElementById("chat").innerHTML += "--- --- --- --- --- ---" + "<br>" + res + " joined" + " (" + date.getHours() + ":"
+        + date.getMinutes() + ")" + "<br>" + "--- --- --- --- --- ---" + "<br>"
+})
+
+socket.on('newMessage', (res) => {
+    document.getElementById("chat").innerHTML += "<br>" + res
+})
+
+// Calculate points
+function updateScore(words) {
+    for (item in words) {
+        if (words[item].length > 1) {
+            scores[username] += getWordPoints(words[item])
+        }
+    }
+    console.log(scores)
+    socket.emit('setScores')
+}
+
+function getWordPoints(word) {
+    var sum = 0;
+    for (letter of word) {
+        sum += getLetterPoints(letter)
+    }
+    return sum;
+}
+
+function reset() {
+    var newscores = []
+    var newboard = new Array(225)
+    var newbag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "J_6", "V_6", "X_8", "Q_10", "Y_10"]
+    socket.emit('setScores', newscores);
+    socket.emit('setBoard', newboard);
+    socket.emit('setBag', newbag);
+    localStorage.setItem('username', "")
     window.location.reload()
 }
 
-function confirm() {
-    document.getElementById("userID").setAttribute("disabled", true)
-    document.getElementById("playerNumber").setAttribute("disabled", true)
-    document.getElementById("confirmbtn").setAttribute("disabled", true)
-    userID = document.getElementById("userID").value
-    playerNumber = document.getElementById("playerNumber").value
-    console.log(userID, playerNumber)
-    intervalID = window.setInterval(refresh, 1000)
-    document.getElementById("settings").style.display = "none"
-    document.getElementById("controls").style.display = "inline"
-    for (let i = 0; i < playerNumber; i++) {
-        var player = document.createElement("tr")
-        player.innerHTML = "Player " + (i + 1) + ": ";
-        document.getElementById("scoreList").appendChild(player);
-        scores.push(0);
-    }
-
-}
-
+// Javascript array to HTML
 function loadBoard() {
     for (let i = 0; i < board.length; i++) {
         if (board[i] != null) {
@@ -75,6 +94,7 @@ function loadBoard() {
             letter.setAttribute("class", "letter")
             letter.classList.add("setInStone")
             value.innerHTML = "47"
+            //TODO ?? 47 ??
             letter.appendChild(value)
             letter.innerHTML = board[i]
             document.getElementById(i).innerHTML = ""
@@ -84,12 +104,14 @@ function loadBoard() {
     }
 }
 
+// Swap letters toggle
 function replace() {
-    console.log(rerollOn)
+
     if (!rerollOn) {
         document.getElementById("donebtn").setAttribute("onclick", "donereroll()")
         document.getElementById("donebtn").disabled = false
         document.getElementById("rerollbtn").style.background = "red"
+        document.getElementById("rerollbtn").textContent = "Cancel"
         var letters = document.getElementsByClassName("letter")
 
         for (item of letters) {
@@ -103,6 +125,7 @@ function replace() {
         document.getElementById("donebtn").setAttribute("onclick", "done()")
         document.getElementById("donebtn").disabled = true
         document.getElementById("rerollbtn").style.background = "#054d05"
+        document.getElementById("rerollbtn").textContent = "Reroll"
         var letters = document.getElementsByClassName("letter")
 
         for (item of letters) {
@@ -128,13 +151,13 @@ function turnRed(e) {
     }
 }
 
+// Finish swapping letters
 function donereroll() {
-    if (lastRecalledVal == userID) {
-        if (firstMove) {
-            firstMove = false
-        }
+
+    if (turn == username) {
 
         document.getElementById("rerollbtn").style.background = "#054d05"
+        document.getElementById("rerollbtn").textContent = "Reroll"
         var letters = document.getElementsByClassName("selected")
         var lettersputback = []
 
@@ -164,52 +187,19 @@ function donereroll() {
 
         rerollOn = false
 
-        if (userID == playerNumber) {
-            firebase.database().ref("/").update({
-                turn: 1,
-            })
-        } else {
-            userIDinc = userID
-            userIDinc++
-            firebase.database().ref("/").update({
-                turn: parseInt(userIDinc),
-            })
-        }
-        intervalID = window.setInterval(refresh, 1000)
+        socket.emit('done', username);
+
     } else {
-        console.log("It's not your turn")
+        document.getElementById("chat").innerHTML += "<br>" + "It's not your turn"
     }
 }
 
-function refresh() {
-    firebase.database().ref('turn').once('value').then(function (snapshot) {
-        if (snapshot.val() != lastRecalledVal) {
-            console.log(snapshot.val())
-            lastRecalledVal = snapshot.val()
-
-            if (lastRecalledVal == userID) {
-                window.clearInterval(intervalID)
-            }
-
-            firebase.database().ref('board').once('value').then(function (snapshot2) {
-                console.log("received board")
-                board = new Array(225).fill(null)
-
-                for (item in snapshot2.val()) {
-                    board[item] = snapshot2.val()[item]
-                }
-                loadBoard()
-            })
-            firebase.database().ref('bag').once('value').then(function (snapshot3) {
-                bag = snapshot3.val()
-            })
-        }
-    })
-}
-
+// Draw letters from the bag
 function draw(x) {
+
     for (let i = 0; i < x; i++) {
         if (bag.length > 0) {
+            console.log("drawing " + x)
             var letter = document.createElement("td")
             var value = document.createElement("sub")
             letter.setAttribute("id", idIndex)
@@ -232,11 +222,10 @@ function draw(x) {
             document.getElementById("playableL").appendChild(letter)
         }
     }
-    firebase.database().ref("/").update({
-        bag: bag,
-    })
+    socket.emit('setBag', bag);
 }
 
+// Interactive drag and drop
 function allowDrop(e) {
     e.preventDefault()
 }
@@ -261,6 +250,7 @@ function drop(e) {
     checkvalid()
 }
 
+// Click on letter to put it back 
 function returnLetter(e) {
     e.target.parentElement.setAttribute("ondragover", "allowDrop(event)")
     changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.id))
@@ -268,7 +258,9 @@ function returnLetter(e) {
     checkvalid()
 }
 
+// Button enabled when making a valid move (no dictionary check)
 function done() {
+    // Register all new words that appear
     var allwords = []
     if (row) {
         for (var j = 0; j < changedFields.length; j++) {
@@ -371,23 +363,26 @@ function done() {
         allwords.push(word)
     }
 
+    // Dictionary check
     validwords = true
 
     for (item of allwords) {
 
         if (!dictionary.includes(item) && item.length > 1) {
             validwords = false
-            console.log('"' + item + '"' + " invalid")
+            console.log()
+            document.getElementById("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
         }
 
         if (firstMove && changedFields.length == 1 && !dictionary.includes(item)) {
             validwords = false
             console.log('"' + item + '"' + " invalid")
+            document.getElementById("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
         }
     }
 
     if (validwords) {
-        if (lastRecalledVal == userID) {
+        if (turn == username) {
             updateScore(allwords);
             if (firstMove) {
                 firstMove = false
@@ -404,32 +399,18 @@ function done() {
             draw(changedFields.length)
             changedFields = []
             checkvalid()
-            console.log(board)
-            firebase.database().ref("/").update({
-                board: board,
-            })
+            socket.emit('setBoard', board);
             console.log("sent board")
 
-            if (userID == playerNumber) {
-                firebase.database().ref("/").update({
-                    turn: 1,
-                })
-            } else {
-                userIDinc = userID
-                userIDinc++
-                firebase.database().ref("/").update({
-                    turn: parseInt(userIDinc),
-                })
+            socket.emit('done', username);
 
-            }
-
-            intervalID = window.setInterval(refresh, 1000)
         } else {
-            console.log("It's not your turn")
+            document.getElementById("chat").innerHTML += "<br>" + "It's not your turn"
         }
     }
 }
 
+// Checks whether a move is valid regardless of its occurence in the dictionary
 function checkvalid() {
 
     row = true
@@ -507,4 +488,41 @@ function checkvalid() {
         }
     }
 
+}
+
+// Enable pressing Enter for username selection and chat message
+
+document.getElementById("chatfield").addEventListener("keyup", function (event) {
+    if (event.key === 'Enter') {
+        socket.emit('say', username + " (" + date.getHours() + ":"
+            + date.getMinutes() + ") - " + document.getElementById("chatfield").value);
+        document.getElementById("chatfield").value = ""
+    }
+});
+
+document.getElementById("usernamefield").addEventListener("keyup", function (event) {
+    if (event.key === 'Enter') {
+        username = document.getElementById("usernamefield").value;
+        document.getElementById("username").style.display = "none";
+        document.getElementById("alleee").style.display = "grid";
+        socket.emit('playerconnect', username);
+        localStorage.setItem('username', username);
+        refresh()
+        draw(8)
+    }
+});
+
+// Inform server of disconnect
+
+window.addEventListener("beforeunload", function (e) {
+    socket.emit('dc', username);
+});
+
+if (localStorage.getItem('username')) {
+    username = localStorage.getItem('username')
+    document.getElementById("username").style.display = "none";
+    document.getElementById("alleee").style.display = "grid";
+    socket.emit('playerconnect', username);
+    refresh()
+    draw(8)
 }

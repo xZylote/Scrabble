@@ -1,46 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script defer src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/8.4.1/firebase-messaging.js"></script>
+    <script defer src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
     <script defer src="words.js"></script>
+    <script defer src="lettervalues.js"></script>
     <script defer src="script.js"></script>
     <title>Scrabble</title>
 </head>
 
 <body>
-    <div class="container">
+    <div style="display: flex; justify-content: center;" id="username">
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <input style="text-align: center;" id="usernamefield" type="text" placeholder="Username">
+    </div>
+
+    <div id="alleee" style="display: none;" class="container">
+
         <div class="button-container">
-            <div id="controls" style="display: none;">
+            <ul id="players" aria-label="Connected Players:">
+            </ul>
+            <div id="controls">
                 <button id="donebtn" class="button" disabled="true" onclick="done()">Done</button>
                 <button id="rerollbtn" class="button" onclick="replace()">Reroll</button>
                 <br>
                 <br>
-                <button id="rerollbtn" class="button" style="height: 50px; width: 204px;"
-                    onclick="resetBoard()">Reset</button>
-            </div>
-            <div id="settings">
-                Players:&nbsp;
-                <select name="Players" id="playerNumber">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-                <br>
-                Your ID:
-                <select name="ID" id="userID">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-                <br>
-                <button id="confirmbtn" onclick="confirm()">Confirm</button>
+                <button id="rerollbtn" class="button" style="height: 50px; width: 250px;"
+                    onclick="reset()">Reset</button>
             </div>
         </div>
         <div class="center-column">
@@ -326,10 +310,8 @@
             </div>
         </div>
         <div class="right-column">
-            <div id="scores">
-                <table id="scoreList">
-                </table>
-            </div>
+            <p id="chat"></p>
+            <input id="chatfield" type="text" placeholder="say something...">
         </div>
     </div>
 </body>
