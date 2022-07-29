@@ -1,5 +1,5 @@
 const date = new Date();
-const socket = io('ws://localhost:8080')
+const socket = io('https://floating-garden-80630.herokuapp.com/')
 var board = new Array(225)
 var bag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "J_6", "V_6", "X_8", "Q_10", "Y_10"]
 
@@ -19,7 +19,6 @@ function refresh() {
 // Handle data from the server
 
 socket.on('boardResponse', (res) => {
-    console.log("received board")
     board = new Array(225).fill(null)
     for (item in res) {
         board[item] = res[item]
@@ -44,8 +43,24 @@ socket.on('turnResponse', (res) => {
 socket.on('bagResponse', (res) => {
     bag = res
 })
+socket.on('bonusResponse', (res) => {
+    console.log(res)
+    for (item of res) {
+        document.getElementById(item).classList.remove("tw", "tl", "dw", "dl")
+    }
+})
 socket.on('scoreResponse', (res) => {
-    scores = res
+
+    res += "";
+    var username = res.split(",")[0]
+    var score = res.split(",")[1]
+    scores[username] = score
+    console.log("SCORES")
+    for (playerscore in scores) {
+        if (playerscore) {
+            console.log(playerscore + ": " + scores[playerscore])
+        }
+    }
 })
 
 socket.on('playerListUpdate', (res) => {
@@ -65,17 +80,6 @@ socket.on('newMessage', (res) => {
     document.getElementById("chat").innerHTML += "<br>" + res
 })
 
-// Calculate points
-function updateScore(words) {
-    for (item in words) {
-        if (words[item].length > 1) {
-            scores[username] += getWordPoints(words[item])
-        }
-    }
-    console.log(scores)
-    socket.emit('setScores')
-}
-
 function getWordPoints(word) {
     var sum = 0;
     for (letter of word) {
@@ -88,7 +92,7 @@ function reset() {
     var newscores = []
     var newboard = new Array(225)
     var newbag = ["E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "E_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "N_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "S_1", "I_1", "I_1", "I_1", "I_1", "I_1", "I_1", "R_1", "R_1", "R_1", "R_1", "R_1", "R_1", "T_1", "T_1", "T_1", "T_1", "T_1", "T_1", "U_1", "U_1", "U_1", "U_1", "U_1", "U_1", "A_1", "A_1", "A_1", "A_1", "A_1", "D_1", "D_1", "D_1", "D_1", "H_2", "H_2", "H_2", "H_2", "M_3", "M_3", "M_3", "M_3", "G_2", "G_2", "G_2", "L_2", "L_2", "L_2", "O_2", "O_2", "O_2", "B_3", "B_3", "C_4", "C_4", "F_4", "F_4", "K_4", "K_4", "W_3", "Z_3", "P_4", "J_6", "V_6", "X_8", "Q_10", "Y_10"]
-    socket.emit('setScores', newscores);
+    socket.emit('clearScores', newscores);
     socket.emit('setBoard', newboard);
     socket.emit('setBag', newbag);
     localStorage.setItem('username', "")
@@ -105,8 +109,6 @@ function loadBoard() {
             letter.setAttribute("class", "letter")
             letter.classList.add("setInStone")
             letter.innerHTML = board[i]
-            console.log(letter)
-            console.log(letter.childNodes[0])
             document.getElementById(i).ondragover = ""
             document.getElementById(i).innerHTML = ""
             document.getElementById(i).appendChild(letter)
@@ -149,6 +151,7 @@ function replace() {
         }
 
         rerollOn = false
+        checkvalid()
     }
 }
 
@@ -175,7 +178,6 @@ function donereroll() {
             var lettersputback = []
 
             for (let i = letters.length - 1; i >= 0; i--) {
-                console.log(letters.item(i).innerHTML)
                 lettersputback.push(letters.item(i).innerHTML.replace("<sub>", "_").replace("</sub>", ""))
                 document.getElementById("playableL").removeChild(letters.item(i))
                 draw(1)
@@ -213,7 +215,6 @@ function draw(x) {
 
     for (let i = 0; i < x; i++) {
         if (bag.length > 0) {
-            console.log("drawing " + x)
             var letter = document.createElement("td")
             var value = document.createElement("sub")
             letter.setAttribute("id", idIndex)
@@ -278,6 +279,10 @@ function returnLetter(e) {
 function done() {
     // Register all new words that appear
     var allwords = []
+    var usedBonus = []
+    var points = 0
+    var totalpoints = 0;
+
     if (row) {
         for (var j = 0; j < changedFields.length; j++) {
             var wordStartIndexV = changedFields[j] - 15
@@ -289,20 +294,64 @@ function done() {
             cont = true
             i = 15
             word = ""
+            multiplier = 1
+            points = 0
 
             while (cont) {
                 if (changedFields.includes(wordStartIndexV + i)) {
                     word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                    if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
+                        points += 2 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                        usedBonus.push(wordStartIndexV + i)
+                    }
+                    else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
+                        points += 3 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                        usedBonus.push(wordStartIndexV + i)
+                    }
+                    else {
+                        points += getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    }
+
+                    if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                        multiplier *= 3
+                        usedBonus.push(wordStartIndexV + i)
+                    }
+                    else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                        multiplier *= 2
+                        usedBonus.push(wordStartIndexV + i)
+                    }
                 } else if (board[wordStartIndexV + i] != null) {
                     word += board[wordStartIndexV + i]
+                    if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
+                        points += 2 * getLetterPoints(board[wordStartIndexV + i])
+                        usedBonus.push(wordStartIndexV + i)
+                    }
+                    else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
+                        points += 3 * getLetterPoints(board[wordStartIndexV + i])
+                        usedBonus.push(wordStartIndexV + i)
+                    }
+                    else {
+                        points += getLetterPoints(board[wordStartIndexV + i])
+                    }
+
+                    if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                        multiplier *= 3
+                        usedBonus.push(wordStartIndexV + i)
+                    }
+                    else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                        multiplier *= 2
+                        usedBonus.push(wordStartIndexV + i)
+                    }
                 } else {
                     cont = false
                 }
 
                 i += 15
             }
-
-            allwords.push(word)
+            if (word.length > 1) {
+                allwords.push(word)
+                totalpoints += points * multiplier
+            }
         }
         var wordStartIndexH = changedFields[0] - 1
 
@@ -313,20 +362,66 @@ function done() {
         var cont = true
         var i = 1
         var word = ""
+        var multiplier = 1
+        var points = 0
+
 
         while (cont) {
             if (changedFields.includes(wordStartIndexH + i)) {
                 word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+
+                if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
+                    points += 2 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    usedBonus.push(wordStartIndexH + i)
+                }
+                else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
+                    points += 3 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    usedBonus.push(wordStartIndexH + i)
+                }
+                else {
+                    points += getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                }
+
+                if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                    multiplier *= 3
+                    usedBonus.push(wordStartIndexH + i)
+                }
+                else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                    multiplier *= 2
+                    usedBonus.push(wordStartIndexH + i)
+                }
             } else if (board[wordStartIndexH + i] != null) {
                 word += board[wordStartIndexH + i]
+                if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
+                    points += 2 * getLetterPoints(board[wordStartIndexH + i])
+                    usedBonus.push(wordStartIndexH + i)
+                }
+                else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
+                    points += 3 * getLetterPoints(board[wordStartIndexH + i])
+                    usedBonus.push(wordStartIndexH + i)
+                }
+                else {
+                    points += getLetterPoints(board[wordStartIndexH + i])
+                }
+
+                if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                    multiplier *= 3
+                    usedBonus.push(wordStartIndexH + i)
+                }
+                else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                    multiplier *= 2
+                    usedBonus.push(wordStartIndexH + i)
+                }
             } else {
                 cont = false
             }
 
             i++
         }
-
-        allwords.push(word)
+        if (word.length > 1) {
+            allwords.push(word)
+            totalpoints += points * multiplier
+        }
 
     } else if (column) {
         for (var j = 0; j < changedFields.length; j++) {
@@ -339,20 +434,63 @@ function done() {
             cont = true
             i = 1
             word = ""
-
+            multiplier = 1
+            points = 0
             while (cont) {
                 if (changedFields.includes(wordStartIndexH + i)) {
                     word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                    if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
+                        points += 2 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                        usedBonus.push(wordStartIndexH + i)
+                    }
+                    else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
+                        points += 3 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                        usedBonus.push(wordStartIndexH + i)
+                    }
+                    else {
+                        points += getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    }
+
+                    if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                        multiplier *= 3
+                        usedBonus.push(wordStartIndexH + i)
+                    }
+                    else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                        multiplier *= 2
+                        usedBonus.push(wordStartIndexH + i)
+                    }
                 } else if (board[wordStartIndexH + i] != null) {
                     word += board[wordStartIndexH + i]
+                    if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
+                        points += 2 * getLetterPoints(board[wordStartIndexH + i])
+                        usedBonus.push(wordStartIndexH + i)
+                    }
+                    else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
+                        points += 3 * getLetterPoints(board[wordStartIndexH + i])
+                        usedBonus.push(wordStartIndexH + i)
+                    }
+                    else {
+                        points += getLetterPoints(board[wordStartIndexH + i])
+                    }
+
+                    if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                        multiplier *= 3
+                        usedBonus.push(wordStartIndexH + i)
+                    }
+                    else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                        multiplier *= 2
+                        usedBonus.push(wordStartIndexH + i)
+                    }
                 } else {
                     cont = false
                 }
 
                 i++
             }
-
-            allwords.push(word)
+            if (word.length > 1) {
+                allwords.push(word)
+                totalpoints += points * multiplier
+            }
         }
 
         var wordStartIndexV = changedFields[0] - 15
@@ -364,29 +502,75 @@ function done() {
         cont = true
         i = 15
         word = ""
-
+        multiplier = 1
+        points = 0
         while (cont) {
             if (changedFields.includes(wordStartIndexV + i)) {
                 word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
+                    points += 2 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    usedBonus.push(wordStartIndexV + i)
+                }
+                else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
+                    points += 3 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    usedBonus.push(wordStartIndexV + i)
+                }
+                else {
+                    points += getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                }
+
+                if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                    multiplier *= 3
+                    usedBonus.push(wordStartIndexV + i)
+                }
+                else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                    multiplier *= 2
+                    usedBonus.push(wordStartIndexV + i)
+                }
+
             } else if (board[wordStartIndexV + i] != null) {
                 word += board[wordStartIndexV + i]
+                if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
+                    points += 2 * getLetterPoints(board[wordStartIndexV + i])
+                    usedBonus.push(wordStartIndexV + i)
+                }
+                else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
+                    points += 3 * getLetterPoints(board[wordStartIndexV + i])
+                    usedBonus.push(wordStartIndexV + i)
+                }
+                else {
+                    points += getLetterPoints(board[wordStartIndexV + i])
+                }
+
+                if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                    usedBonus.push(wordStartIndexV + i)
+                    multiplier *= 3
+                }
+                else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                    usedBonus.push(wordStartIndexV + i)
+                    multiplier *= 2
+                }
             } else {
                 cont = false
             }
 
             i += 15
         }
-        allwords.push(word)
-    }
 
+        if (word.length > 1) {
+            allwords.push(word)
+            totalpoints += points * multiplier
+        }
+
+    }
     // Dictionary check
-    validwords = true
+    var validwords = true
 
     for (item of allwords) {
 
         if (!dictionary.includes(item) && item.length > 1) {
             validwords = false
-            console.log()
+            console.log('"' + item + '"' + " invalid")
             document.getElementById("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
         }
 
@@ -399,7 +583,11 @@ function done() {
 
     if (validwords) {
         if (turn == username) {
-            updateScore(allwords);
+            socket.emit('removeBonus', usedBonus)
+            var temp = scores[username] || "0"
+            scores[username] = "0"
+            scores[username] = "" + (parseInt(scores[username]) + parseInt(totalpoints) + parseInt(temp))
+            socket.emit('setScores', username + "," + scores[username])
             if (firstMove) {
                 firstMove = false
             }
@@ -416,8 +604,6 @@ function done() {
             changedFields = []
             checkvalid()
             socket.emit('setBoard', board);
-            console.log("sent board")
-
             socket.emit('done', username);
 
         } else {
