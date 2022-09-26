@@ -21,7 +21,9 @@ body {
     flex-direction: column;
     align-items: center;
     height: 90vh;
+    width: 782px; /* Width of the defined board */
 }
+
 
 td {
     text-align: center;
@@ -44,6 +46,20 @@ sub {
     color: black;
     -webkit-text-stroke: 0;
     pointer-events: none;
+}
+
+.left-column {
+    width: 250px;
+}
+
+#controls {
+    display: flex;
+    margin: 5px 0;
+}
+
+
+.right-column {
+    width: 250px;
 }
 
 .letter {
@@ -86,6 +102,7 @@ sub {
     border: none;
     border-radius: 5px;
 }
+
 .selected {
     background-color: red !important;
 }
@@ -102,20 +119,25 @@ sub {
     background-color: grey !important;
 }
 
-#chat{
+#chat {
     border-radius: 5px;
     padding: 5px;
     width: 250px;
     height: 400;
     background-color: lightgrey;
 }
-#chatfield{
+#chatfield {
     border-radius: 5px;
     width: 250px;
     height: 30;
     background-color: lightgrey;
 }
-#usernamefield{
+
+#username {
+    margin-top: 25%;
+}
+
+#usernamefield {
     border-radius: 5px;
     width: 50%;
     height: 100px;
@@ -139,7 +161,7 @@ li {
     color: lightgrey;
     border-radius: 5px;
 }
-    
+
 ul{
     border-radius: 5px;
     width: 250px; 

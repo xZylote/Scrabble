@@ -9,23 +9,20 @@
 
 <body>
     <div style="display: flex; justify-content: center;" id="username">
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         <input style="text-align: center;" id="usernamefield" type="text" placeholder="Username">
     </div>
 
     <div id="alleee" style="display: none;" class="container">
 
-        <div class="button-container">
+        <div class="left-column">
             <ul id="players" aria-label="Connected Players:">
             </ul>
             <div id="controls">
                 <button id="donebtn" class="button" disabled="true" onclick="done()">Done</button>
                 <button id="rerollbtn" class="button" onclick="replace()">Reroll</button>
-                <br>
-                <br>
-                <button id="startbtn" class="button" style="height: 50px; width: 250px;"
-                    onclick="start()">Start</button>
             </div>
+            <button id="startbtn" class="button" style="height: 50px; width: 250px;"
+            onclick="start()">Start</button>
         </div>
         <div class="center-column">
             <div class="letters">
