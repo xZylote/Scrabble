@@ -1,5 +1,4 @@
 * {
-    margin: auto;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     box-sizing: border-box;
     user-select: none;
@@ -11,33 +10,12 @@ body {
     position: relative;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: auto auto auto;
-}
-
-.board {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 90vh;
-    width: 782px; /* Width of the defined board */
-}
-
-
 td {
     text-align: center;
     background-color: rgb(5, 77, 5);
     width: 50px;
     height: 50px;
     border-radius: 1px;
-}
-
-.letters {
-    width: 400px;
-    height: 60px;
-    display: flex;
-    align-items: center;
 }
 
 sub {
@@ -48,18 +26,70 @@ sub {
     pointer-events: none;
 }
 
-.left-column {
-    width: 250px;
+li {
+    line-height: 40px;
+    padding: 0 20px;
+    height: 40px;
+    font-size: 30px;
+    background-color: #242424;
+    color: lightgrey;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+ul {
+    border-radius: 5px;
+    text-align: center;
+    background-color:lightgrey;
+    overflow-y: scroll;
+    overflow: hidden;
+    margin: 0;
+}
+
+ul:before {
+    content:attr(aria-label);
+    font-weight:bold;
+    padding: 10px;
+    font-size: 20px;
+    color: #242424;
+}
+
+.container {
+  justify-content: center;
+  grid-template-columns: 1fr 782px 1fr;
+  grid-template-rows: 10% 60% 30%;
+  grid-gap: 10px;
+  height: 100vh;
+  padding-left: 20px;
+}
+
+.lobby-container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    grid-row: 2/2;
+}
+
+#players {
+    border-radius: 5px;
+    padding: 5px;
+    height: 100%;
 }
 
 #controls {
+    grid-row: 3/3;
     display: flex;
-    margin: 5px 0;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 300px;
 }
 
-
-.right-column {
-    width: 250px;
+.letters-container {
+    grid-column: 2/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .letter {
@@ -75,6 +105,13 @@ sub {
     -webkit-text-stroke: 1.5px black;
     border-radius: 4px;
     box-shadow: inset 0 0 5px 2px rgba(0,0,0,0.7);
+}
+
+.board {
+    grid-row: 2/2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .tw {
@@ -97,10 +134,14 @@ sub {
     background: #054d05;
     font-size: 2rem;
     color: white;
-    width: 123px;
+    width: 50%;
     height: 50px;
     border: none;
     border-radius: 5px;
+}
+
+#donebtn {
+    margin-right: 5px;
 }
 
 .selected {
@@ -119,18 +160,35 @@ sub {
     background-color: grey !important;
 }
 
+.chat-container {
+    grid-row: 2/2;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
 #chat {
     border-radius: 5px;
     padding: 5px;
-    width: 250px;
-    height: 400;
     background-color: lightgrey;
+    height: 100%;
+    width: 300px;
+    margin: 0;
 }
+
 #chatfield {
+    grid-row: 3/3;
+    grid-column: 3/3;
     border-radius: 5px;
-    width: 250px;
-    height: 30;
+    height: 30px;
+    width: 300px;
     background-color: lightgrey;
+    border-style: none;
+    margin: 5px auto 0 auto;
+}
+
+#chatfield:focus-visible {
+    outline: none;
 }
 
 #username {
@@ -144,37 +202,4 @@ sub {
     background-color: lightgrey;
     font-size:50pt
 }
-#players {
-    border-radius: 5px;
-    padding: 5px;
-    width: 250px;
-    height: 400;
-}
-li {
-    line-height: 40px;
-    width: 230px;  
-    padding: 5px 20px;
-    overflow: hidden;
-    height: 40px;
-    font-size: 30px;
-    background-color: #242424;
-    color: lightgrey;
-    border-radius: 5px;
-}
 
-ul{
-    border-radius: 5px;
-    width: 250px; 
-    text-align: center;
-    background-color:lightgrey;
-    overflow-y: scroll;
-    overflow: hidden;
-
-}
-ul:before{
-    content:attr(aria-label);
-    font-weight:bold;
-    padding: 10px;
-    font-size: 20px;
-    color: #242424;
-}

@@ -66,6 +66,7 @@ socket.on('scoreResponse', (res) => {
 socket.on('playerListUpdate', (res) => {
     document.getElementById("players").innerHTML = ""
     for (item of res) {
+        if (item.length > 15) item = item.substring(0, 15) + "..."
         var player = document.createElement("li")
         player.innerHTML = item
         document.getElementById("players").appendChild(player)
