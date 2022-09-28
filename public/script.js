@@ -67,23 +67,26 @@ socket.on('playerListUpdate', (res) => {
     document.getElementById("players").innerHTML = ""
     for (item of res) {
         if (item.length > 15) item = item.substring(0, 15) + "..."
-        var player = document.createElement("li")
+            var player = document.createElement("li")
         player.innerHTML = item
         document.getElementById("players").appendChild(player)
     }
 })
 socket.on('newPlayerAnnouncement', (res) => {
-    document.getElementById("chat").innerHTML +=    "--- --- --- --- --- ---" 
-                                                    + "<br>"
-                                                    + "[" + date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + "] " + res + " joined" 
-                                                    + "<br>" 
-                                                    + "--- --- --- --- --- ---" 
-                                                    + "<br>"
+    var msg = document.createElement("div")
+    msg.innerHTML =    "--- --- --- --- --- ---" 
+    + "<br>"
+    + "[" + date.getHours() + ":" + date.getMinutes() + "] " + res + " joined" 
+    + "<br>" 
+    + "--- --- --- --- --- ---" 
+    + "<br>"
+    document.getElementsByClassName("chat-container")[0].prepend(msg)
 })
 
 socket.on('newMessage', (res) => {
-    document.getElementById("chat").innerHTML += "<br>" + res
-	document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
+	var msg = document.createElement("div")
+    msg.innerHTML = res
+    document.getElementsByClassName("chat-container")[0].prepend(msg)
 })
 
 function getWordPoints(word) {
