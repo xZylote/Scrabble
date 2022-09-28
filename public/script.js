@@ -83,6 +83,7 @@ socket.on('newPlayerAnnouncement', (res) => {
 
 socket.on('newMessage', (res) => {
     document.getElementById("chat").innerHTML += "<br>" + res
+	document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
 })
 
 function getWordPoints(word) {
