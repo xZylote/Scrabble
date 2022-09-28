@@ -708,7 +708,7 @@ document.getElementById("chatfield").addEventListener("keyup", function (event) 
         if (document.getElementById("chatfield").value == "/reset") {
             reset()
         } else {
-            socket.emit('say', "[" + date.getHours() + ":" + date.getMinutes() + "] " + username + ":  " + document.getElementById("chatfield").value);
+            socket.emit('say', "[" + date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + "] " + username + ":  " + document.getElementById("chatfield").value);
             document.getElementById("chatfield").value = ""
         }
     }
