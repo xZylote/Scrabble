@@ -76,7 +76,7 @@ socket.on('newPlayerAnnouncement', (res) => {
     var msg = document.createElement("div")
     msg.innerHTML =    "--- --- --- --- --- ---" 
     + "<br>"
-    + "[" + date.getHours() + ":" + date.getMinutes() + "] " + res + " joined" 
+    + "[" + date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + "] " + res + " joined" 
     + "<br>" 
     + "--- --- --- --- --- ---" 
     + "<br>"
