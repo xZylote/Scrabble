@@ -75,7 +75,7 @@ socket.on('playerListUpdate', (res) => {
 socket.on('newPlayerAnnouncement', (res) => {
     document.getElementById("chat").innerHTML +=    "--- --- --- --- --- ---" 
                                                     + "<br>"
-                                                    + "[" + date.getHours() + ":" + date.getMinutes() + "] " + res + " joined" 
+                                                    + "[" + date.getHours().padStart(2, "0") + ":" + date.getMinutes().padStart(2, "0") + "] " + res + " joined" 
                                                     + "<br>" 
                                                     + "--- --- --- --- --- ---" 
                                                     + "<br>"
@@ -705,7 +705,7 @@ document.getElementById("chatfield").addEventListener("keyup", function (event) 
         if (document.getElementById("chatfield").value == "/reset") {
             reset()
         } else {
-            socket.emit('say', "[" + date.getHours() + ":" + date.getMinutes() + "] " + username + ":  " + document.getElementById("chatfield").value);
+            socket.emit('say', "[" + date.getHours().padStart(2, "0") + ":" + date.getMinutes().padStart(2, "0") + "] " + username + ":  " + document.getElementById("chatfield").value);
             document.getElementById("chatfield").value = ""
         }
     }
