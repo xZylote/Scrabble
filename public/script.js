@@ -1,3 +1,4 @@
+function $(x) { return document.getElementById(x) }
 const date = new Date();
 const socket = io('https://floating-garden-80630.herokuapp.com/')
 var board = new Array(225)
@@ -30,12 +31,12 @@ socket.on('turnResponse', (res) => {
     colorActivePlayer()
     if (turn != username) {
         for (let i = 0; i < board.length; i++) {
-            document.getElementById(i).ondragover = ""
+            $(i).ondragover = ""
         }
     } else {
         for (let i = 0; i < board.length; i++) {
             if (board[i] == null) {
-                document.getElementById(i).setAttribute("ondragover", "allowDrop(event)")
+                $(i).setAttribute("ondragover", "allowDrop(event)")
             }
         }
     }
@@ -46,7 +47,7 @@ socket.on('bagResponse', (res) => {
 socket.on('bonusResponse', (res) => {
     console.log(res)
     for (item of res) {
-        document.getElementById(item).classList.remove("tw", "tl", "dw", "dl")
+        $(item).classList.remove("tw", "tl", "dw", "dl")
     }
 })
 socket.on('scoreResponse', (res) => {
@@ -64,12 +65,12 @@ socket.on('scoreResponse', (res) => {
 })
 
 socket.on('playerListUpdate', (res) => {
-    document.getElementById("players").innerHTML = ""
+    $("players").innerHTML = ""
     for (item of res) {
         if (item.length > 15) item = item.substring(0, 15) + "..."
             var player = document.createElement("li")
         player.innerHTML = item
-        document.getElementById("players").appendChild(player)
+        $("players").appendChild(player)
     }
 })
 socket.on('newPlayerAnnouncement', (res) => {
@@ -118,9 +119,9 @@ function loadBoard() {
             letter.setAttribute("class", "letter")
             letter.classList.add("setInStone")
             letter.innerHTML = board[i]
-            document.getElementById(i).ondragover = ""
-            document.getElementById(i).innerHTML = ""
-            document.getElementById(i).appendChild(letter)
+            $(i).ondragover = ""
+            $(i).innerHTML = ""
+            $(i).appendChild(letter)
             firstMove = false
         }
     }
@@ -130,10 +131,10 @@ function loadBoard() {
 function replace() {
 
     if (!rerollOn) {
-        document.getElementById("donebtn").setAttribute("onclick", "donereroll()")
-        document.getElementById("donebtn").disabled = false
-        document.getElementById("rerollbtn").style.background = "red"
-        document.getElementById("rerollbtn").textContent = "Cancel"
+        $("donebtn").setAttribute("onclick", "donereroll()")
+        $("donebtn").disabled = false
+        $("rerollbtn").style.background = "red"
+        $("rerollbtn").textContent = "Cancel"
         var letters = document.getElementsByClassName("letter")
 
         for (item of letters) {
@@ -144,10 +145,10 @@ function replace() {
 
         rerollOn = true
     } else {
-        document.getElementById("donebtn").setAttribute("onclick", "done()")
-        document.getElementById("donebtn").disabled = true
-        document.getElementById("rerollbtn").style.background = "#054d05"
-        document.getElementById("rerollbtn").textContent = "Reroll"
+        $("donebtn").setAttribute("onclick", "done()")
+        $("donebtn").disabled = true
+        $("rerollbtn").style.background = "#054d05"
+        $("rerollbtn").textContent = "Reroll"
         var letters = document.getElementsByClassName("letter")
 
         for (item of letters) {
@@ -181,14 +182,14 @@ function donereroll() {
     } else {
         if (turn == username) {
 
-            document.getElementById("rerollbtn").style.background = "#054d05"
-            document.getElementById("rerollbtn").textContent = "Reroll"
+            $("rerollbtn").style.background = "#054d05"
+            $("rerollbtn").textContent = "Reroll"
             var letters = document.getElementsByClassName("selected")
             var lettersputback = []
 
             for (let i = letters.length - 1; i >= 0; i--) {
                 lettersputback.push(letters.item(i).innerHTML.replace("<sub>", "_").replace("</sub>", ""))
-                document.getElementById("playableL").removeChild(letters.item(i))
+                $("playableL").removeChild(letters.item(i))
                 draw(1)
             }
 
@@ -196,9 +197,9 @@ function donereroll() {
                 bag.push(lettersputback[i])
             }
 
-            document.getElementById("donebtn").setAttribute("onclick", "done()")
-            document.getElementById("donebtn").disabled = true
-            document.getElementById("rerollbtn").style.background = "#054d05"
+            $("donebtn").setAttribute("onclick", "done()")
+            $("donebtn").disabled = true
+            $("rerollbtn").style.background = "#054d05"
             var letters = document.getElementsByClassName("letter")
             for (item of letters) {
                 if (!item.classList.contains("setInStone")) {
@@ -214,7 +215,7 @@ function donereroll() {
             socket.emit('done', username);
 
         } else {
-            document.getElementById("chat").innerHTML += "<br>" + "It's not your turn"
+            $("chat").innerHTML += "<br>" + "It's not your turn"
         }
     }
 }
@@ -243,7 +244,7 @@ function draw(x) {
             value.innerHTML = item.split("_")[1]
 
             letter.appendChild(value)
-            document.getElementById("playableL").appendChild(letter)
+            $("playableL").appendChild(letter)
         }
     }
     socket.emit('setBag', bag);
@@ -267,7 +268,7 @@ function drop(e) {
         var data = e.dataTransfer.getData("text")
 
         if (e.target.id != data) {
-            e.target.appendChild(document.getElementById(data))
+            e.target.appendChild($(data))
             changedFields.push(parseInt(e.target.id))
             e.target.ondragover = ""
         }
@@ -280,7 +281,7 @@ function drop(e) {
 function returnLetter(e) {
     e.target.parentElement.setAttribute("ondragover", "allowDrop(event)")
     changedFields = changedFields.filter(item => item !== parseInt(e.target.parentElement.id))
-    document.getElementById("playableL").appendChild(document.getElementById(e.target.id))
+    $("playableL").appendChild($(e.target.id))
     checkvalid()
 }
 
@@ -308,34 +309,34 @@ function done() {
 
             while (cont) {
                 if (changedFields.includes(wordStartIndexV + i)) {
-                    word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
-                    if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
-                        points += 2 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    word += $(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                    if ($(wordStartIndexV + i).classList.contains("dl")) {
+                        points += 2 * getLetterPoints($(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                         usedBonus.push(wordStartIndexV + i)
                     }
-                    else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
-                        points += 3 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    else if ($(wordStartIndexV + i).classList.contains("tl")) {
+                        points += 3 * getLetterPoints($(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                         usedBonus.push(wordStartIndexV + i)
                     }
                     else {
-                        points += getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                        points += getLetterPoints($(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                     }
 
-                    if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                    if ($(wordStartIndexV + i).classList.contains("tw")) {
                         multiplier *= 3
                         usedBonus.push(wordStartIndexV + i)
                     }
-                    else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                    else if ($(wordStartIndexV + i).classList.contains("dw")) {
                         multiplier *= 2
                         usedBonus.push(wordStartIndexV + i)
                     }
                 } else if (board[wordStartIndexV + i] != null) {
                     word += board[wordStartIndexV + i]
-                    if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
+                    if ($(wordStartIndexV + i).classList.contains("dl")) {
                         points += 2 * getLetterPoints(board[wordStartIndexV + i])
                         usedBonus.push(wordStartIndexV + i)
                     }
-                    else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
+                    else if ($(wordStartIndexV + i).classList.contains("tl")) {
                         points += 3 * getLetterPoints(board[wordStartIndexV + i])
                         usedBonus.push(wordStartIndexV + i)
                     }
@@ -343,11 +344,11 @@ function done() {
                         points += getLetterPoints(board[wordStartIndexV + i])
                     }
 
-                    if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                    if ($(wordStartIndexV + i).classList.contains("tw")) {
                         multiplier *= 3
                         usedBonus.push(wordStartIndexV + i)
                     }
-                    else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                    else if ($(wordStartIndexV + i).classList.contains("dw")) {
                         multiplier *= 2
                         usedBonus.push(wordStartIndexV + i)
                     }
@@ -377,35 +378,35 @@ function done() {
 
         while (cont) {
             if (changedFields.includes(wordStartIndexH + i)) {
-                word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                word += $(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
 
-                if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
-                    points += 2 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                if ($(wordStartIndexH + i).classList.contains("dl")) {
+                    points += 2 * getLetterPoints($(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                     usedBonus.push(wordStartIndexH + i)
                 }
-                else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
-                    points += 3 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                else if ($(wordStartIndexH + i).classList.contains("tl")) {
+                    points += 3 * getLetterPoints($(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                     usedBonus.push(wordStartIndexH + i)
                 }
                 else {
-                    points += getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    points += getLetterPoints($(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                 }
 
-                if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                if ($(wordStartIndexH + i).classList.contains("tw")) {
                     multiplier *= 3
                     usedBonus.push(wordStartIndexH + i)
                 }
-                else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                else if ($(wordStartIndexH + i).classList.contains("dw")) {
                     multiplier *= 2
                     usedBonus.push(wordStartIndexH + i)
                 }
             } else if (board[wordStartIndexH + i] != null) {
                 word += board[wordStartIndexH + i]
-                if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
+                if ($(wordStartIndexH + i).classList.contains("dl")) {
                     points += 2 * getLetterPoints(board[wordStartIndexH + i])
                     usedBonus.push(wordStartIndexH + i)
                 }
-                else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
+                else if ($(wordStartIndexH + i).classList.contains("tl")) {
                     points += 3 * getLetterPoints(board[wordStartIndexH + i])
                     usedBonus.push(wordStartIndexH + i)
                 }
@@ -413,11 +414,11 @@ function done() {
                     points += getLetterPoints(board[wordStartIndexH + i])
                 }
 
-                if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                if ($(wordStartIndexH + i).classList.contains("tw")) {
                     multiplier *= 3
                     usedBonus.push(wordStartIndexH + i)
                 }
-                else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                else if ($(wordStartIndexH + i).classList.contains("dw")) {
                     multiplier *= 2
                     usedBonus.push(wordStartIndexH + i)
                 }
@@ -447,34 +448,34 @@ function done() {
             points = 0
             while (cont) {
                 if (changedFields.includes(wordStartIndexH + i)) {
-                    word += document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
-                    if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
-                        points += 2 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    word += $(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                    if ($(wordStartIndexH + i).classList.contains("dl")) {
+                        points += 2 * getLetterPoints($(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                         usedBonus.push(wordStartIndexH + i)
                     }
-                    else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
-                        points += 3 * getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    else if ($(wordStartIndexH + i).classList.contains("tl")) {
+                        points += 3 * getLetterPoints($(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                         usedBonus.push(wordStartIndexH + i)
                     }
                     else {
-                        points += getLetterPoints(document.getElementById(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                        points += getLetterPoints($(wordStartIndexH + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                     }
 
-                    if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                    if ($(wordStartIndexH + i).classList.contains("tw")) {
                         multiplier *= 3
                         usedBonus.push(wordStartIndexH + i)
                     }
-                    else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                    else if ($(wordStartIndexH + i).classList.contains("dw")) {
                         multiplier *= 2
                         usedBonus.push(wordStartIndexH + i)
                     }
                 } else if (board[wordStartIndexH + i] != null) {
                     word += board[wordStartIndexH + i]
-                    if (document.getElementById(wordStartIndexH + i).classList.contains("dl")) {
+                    if ($(wordStartIndexH + i).classList.contains("dl")) {
                         points += 2 * getLetterPoints(board[wordStartIndexH + i])
                         usedBonus.push(wordStartIndexH + i)
                     }
-                    else if (document.getElementById(wordStartIndexH + i).classList.contains("tl")) {
+                    else if ($(wordStartIndexH + i).classList.contains("tl")) {
                         points += 3 * getLetterPoints(board[wordStartIndexH + i])
                         usedBonus.push(wordStartIndexH + i)
                     }
@@ -482,11 +483,11 @@ function done() {
                         points += getLetterPoints(board[wordStartIndexH + i])
                     }
 
-                    if (document.getElementById(wordStartIndexH + i).classList.contains("tw")) {
+                    if ($(wordStartIndexH + i).classList.contains("tw")) {
                         multiplier *= 3
                         usedBonus.push(wordStartIndexH + i)
                     }
-                    else if (document.getElementById(wordStartIndexH + i).classList.contains("dw")) {
+                    else if ($(wordStartIndexH + i).classList.contains("dw")) {
                         multiplier *= 2
                         usedBonus.push(wordStartIndexH + i)
                     }
@@ -515,35 +516,35 @@ function done() {
         points = 0
         while (cont) {
             if (changedFields.includes(wordStartIndexV + i)) {
-                word += document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
-                if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
-                    points += 2 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                word += $(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                if ($(wordStartIndexV + i).classList.contains("dl")) {
+                    points += 2 * getLetterPoints($(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                     usedBonus.push(wordStartIndexV + i)
                 }
-                else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
-                    points += 3 * getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                else if ($(wordStartIndexV + i).classList.contains("tl")) {
+                    points += 3 * getLetterPoints($(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                     usedBonus.push(wordStartIndexV + i)
                 }
                 else {
-                    points += getLetterPoints(document.getElementById(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
+                    points += getLetterPoints($(wordStartIndexV + i).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1))
                 }
 
-                if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                if ($(wordStartIndexV + i).classList.contains("tw")) {
                     multiplier *= 3
                     usedBonus.push(wordStartIndexV + i)
                 }
-                else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                else if ($(wordStartIndexV + i).classList.contains("dw")) {
                     multiplier *= 2
                     usedBonus.push(wordStartIndexV + i)
                 }
 
             } else if (board[wordStartIndexV + i] != null) {
                 word += board[wordStartIndexV + i]
-                if (document.getElementById(wordStartIndexV + i).classList.contains("dl")) {
+                if ($(wordStartIndexV + i).classList.contains("dl")) {
                     points += 2 * getLetterPoints(board[wordStartIndexV + i])
                     usedBonus.push(wordStartIndexV + i)
                 }
-                else if (document.getElementById(wordStartIndexV + i).classList.contains("tl")) {
+                else if ($(wordStartIndexV + i).classList.contains("tl")) {
                     points += 3 * getLetterPoints(board[wordStartIndexV + i])
                     usedBonus.push(wordStartIndexV + i)
                 }
@@ -551,11 +552,11 @@ function done() {
                     points += getLetterPoints(board[wordStartIndexV + i])
                 }
 
-                if (document.getElementById(wordStartIndexV + i).classList.contains("tw")) {
+                if ($(wordStartIndexV + i).classList.contains("tw")) {
                     usedBonus.push(wordStartIndexV + i)
                     multiplier *= 3
                 }
-                else if (document.getElementById(wordStartIndexV + i).classList.contains("dw")) {
+                else if ($(wordStartIndexV + i).classList.contains("dw")) {
                     usedBonus.push(wordStartIndexV + i)
                     multiplier *= 2
                 }
@@ -580,13 +581,13 @@ function done() {
         if (!dictionary.includes(item) && item.length > 1) {
             validwords = false
             console.log('"' + item + '"' + " invalid")
-            document.getElementById("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
+            $("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
         }
 
         if (firstMove && changedFields.length == 1 && !dictionary.includes(item)) {
             validwords = false
             console.log('"' + item + '"' + " invalid")
-            document.getElementById("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
+            $("chat").innerHTML += "<br>" + '"' + item + '"' + " invalid"
         }
     }
 
@@ -602,11 +603,11 @@ function done() {
             }
 
             for (item of changedFields) {
-                document.getElementById(item).childNodes[0].setAttribute("draggable", "false")
-                document.getElementById(item).childNodes[0].setAttribute("onclick", "")
-                document.getElementById(item).childNodes[0].classList.add("setInStone")
-                document.getElementById(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
-                board[item] = document.getElementById(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
+                $(item).childNodes[0].setAttribute("draggable", "false")
+                $(item).childNodes[0].setAttribute("onclick", "")
+                $(item).childNodes[0].classList.add("setInStone")
+                $(item).childNodes[0].childNodes[1].setAttribute("onclick", "")
+                board[item] = $(item).childNodes[0].innerHTML.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "").substr(0, 1)
             }
 
             draw(changedFields.length)
@@ -616,7 +617,7 @@ function done() {
             socket.emit('done', username);
 
         } else {
-            document.getElementById("chat").innerHTML += "<br>" + "It's not your turn"
+            $("chat").innerHTML += "<br>" + "It's not your turn"
         }
     }
 }
@@ -628,7 +629,7 @@ function checkvalid() {
     column = true
 
     changedFields.sort((a, b) => a - b)
-    document.getElementById("donebtn").disabled = true
+    $("donebtn").disabled = true
     if (changedFields.length != 0) {
 
         var numberRow = Math.floor(changedFields[0] / 15)
@@ -655,12 +656,12 @@ function checkvalid() {
                 }
 
                 if (adjacent || changedFields.length == 1) {
-                    document.getElementById("donebtn").disabled = false
+                    $("donebtn").disabled = false
                 }
             } else {
                 if (changedFields.length == 1) {
                     if (board[changedFields[0] - 1] != null || board[changedFields[0] + 1] != null || board[changedFields[0] - 15] != null || board[changedFields[0] + 15] != null) {
-                        document.getElementById("donebtn").disabled = false
+                        $("donebtn").disabled = false
                     }
                 } else {
                     var connected = false
@@ -691,7 +692,7 @@ function checkvalid() {
                     }
 
                     if (adjacent && connected) {
-                        document.getElementById("donebtn").disabled = false
+                        $("donebtn").disabled = false
                     }
                 }
             }
@@ -703,22 +704,22 @@ function checkvalid() {
 
 // Enable pressing Enter for username selection and chat message
 
-document.getElementById("chatfield").addEventListener("keyup", function (event) {
+$("chatfield").addEventListener("keyup", function (event) {
     if (event.key === 'Enter') {
-        if (document.getElementById("chatfield").value == "/reset") {
+        if ($("chatfield").value == "/reset") {
             reset()
         } else {
-            socket.emit('say', "[" + date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + "] " + username + ":  " + document.getElementById("chatfield").value);
-            document.getElementById("chatfield").value = ""
+            socket.emit('say', "[" + date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + "] " + username + ":  " + $("chatfield").value);
+            $("chatfield").value = ""
         }
     }
 });
 
-document.getElementById("usernamefield").addEventListener("keyup", function (event) {
+$("usernamefield").addEventListener("keyup", function (event) {
     if (event.key === 'Enter') {
-        username = document.getElementById("usernamefield").value;
-        document.getElementById("username").style.display = "none";
-        document.getElementById("alleee").style.display = "grid";
+        username = $("usernamefield").value;
+        $("username").style.display = "none";
+        $("alleee").style.display = "grid";
         socket.emit('playerconnect', username);
         localStorage.setItem('username', username);
         refresh()
@@ -734,15 +735,15 @@ window.addEventListener("beforeunload", function (e) {
 
 /* if (localStorage.getItem('username')) {
     username = localStorage.getItem('username')
-    document.getElementById("username").style.display = "none";
-    document.getElementById("alleee").style.display = "grid";
+    $("username").style.display = "none";
+    $("alleee").style.display = "grid";
     socket.emit('playerconnect', username);
     refresh()
     draw(8)
 } */
 
 function colorActivePlayer() {
-    var playerlist = document.getElementById("players").getElementsByTagName("li");
+    var playerlist = $("players").getElementsByTagName("li");
     for (player of playerlist) {
         if (turn == player.innerText) {
             player.style.backgroundColor = "red"
@@ -753,5 +754,5 @@ function colorActivePlayer() {
 }
 
 function start() {
-    document.getElementById("startbtn").style.display = "none"
+    $("startbtn").style.display = "none"
 }
